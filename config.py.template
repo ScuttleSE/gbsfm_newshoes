@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+#Discord bot settings
+discord_application_id = 'xxx'
+discord_public_key = 'yyy'
+discord_bot_name = 'shoes_testbot'
+discord_bot_token = 'zzz'
+discord_oauth_id = '870273931aaa901296651'
+discord_oauth_secret = 'bbb'
+discord_ignored_ids = ['1234567890'] #Long discord IDs of users the bot should ignore
+discord_ignored_channel_ids = ['1234567890'] #Discord IDs of channels the bot should ignore messages from (gbs-fm)
+
+#Database settings
+mysql_dbhost = '1.1.1.1'
+mysql_user = 'username'
+mysql_passwd = 'password'
+mysql_db = 'database'
+
+#Various gbs.fm settings
+gbsfm_baseurl = 'https://example.com'
+
+#Wolfram alpha token
+wa_token = 'X'
