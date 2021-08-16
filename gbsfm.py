@@ -217,7 +217,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         and auth_user.username = %s \
                         order by RAND() limit 10", [querystring])
     elif query_type == 'dongid': #Add by dong id
-        query.execute ("SELECT ps.id, ps.title, playlist_artist.`name`, pa.`name` AS album \
+        query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
                         FROM playlist_song AS ps \
                         INNER JOIN playlist_album AS pa ON ps.album_id = pa.id \
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
@@ -226,7 +226,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
                         limit 1", [querystring])
     elif query_type == 'dongid24no': #Add by dong id
-        query.execute ("SELECT ps.id, ps.title, playlist_artist.`name`, pa.`name` AS album \
+        query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
                         FROM playlist_song AS ps \
                         INNER JOIN playlist_album AS pa ON ps.album_id = pa.id \
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \

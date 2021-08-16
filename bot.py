@@ -7,6 +7,7 @@ import asyncio
 import hashlib
 import wa
 import playing
+import subprocess
 
 print(config.discord_application_id)
 
@@ -50,7 +51,7 @@ wordlist_addlist_short         = ["sup"]
 string_not_authed_response     = 'Not authed!'
 list_roles_give_tokens         = ['503240105776119812']
 list_roles_play_jingle         = ['503240105776119812']
-list_roles_system              = ['503240105776119812']
+list_roles_system              = ['503240105776119812', '503250808503009281']
 token_response_no_allowed      = 'You are not allowed to give out tokens!'
 string_available_roles         = "Currently available roles:\n He/Him - he_him\nShe/Her - she_her\nThey/Them - they_them\nSyntax is \"!addrole he_him\""
 string_role_added              = "Role added.\nIf you want to remove a role, use the command !removerole <role>"
