@@ -428,8 +428,6 @@ def gbsfm_vote ( vote, user_gbsfmid, user_apikey ):
     #Get currently playing song
     song_id, songtitle, artist, album = gbsfm_nowplaying()
 
-    print(votemode)
-
     if votemode == 'normal':
         votenumber = vote[0]
         votesuccess = True
@@ -507,11 +505,11 @@ def gbsfm_vote ( vote, user_gbsfmid, user_apikey ):
         else:
             returnmessage = "That's not a valid vote-macro"
     if votesuccess:
-        #print(song)
+        print(song)
         print(votemode)
 
         if votemode == 'normal':
-            returnmessage = "You voted"  + str(votenumber) + " on " + songtitle + " by " + artist
+            returnmessage = "You voted "  + str(votenumber) + " on " + songtitle + " by " + artist
         if votemode == 'normal_macro':
             returnmessage = "You voted " + vote + " (" + str(votenumber) + ") " + " on " + songtitle + " by " + artist
         if votemode == 'advanced' or votemode == 'advanced_macro':
