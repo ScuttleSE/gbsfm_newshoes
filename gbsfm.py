@@ -505,9 +505,6 @@ def gbsfm_vote ( vote, user_gbsfmid, user_apikey ):
         else:
             returnmessage = "That's not a valid vote-macro"
     if votesuccess:
-        print(song)
-        print(votemode)
-
         if votemode == 'normal':
             returnmessage = "You voted "  + str(votenumber) + " on " + songtitle + " by " + artist
         if votemode == 'normal_macro':
