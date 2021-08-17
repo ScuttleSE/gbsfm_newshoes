@@ -521,7 +521,7 @@ def gbsfm_vote ( vote, user_gbsfmid, user_apikey ):
             returnmessage = "You voted " + str(vote) + " (" + str(votenumber) + ") " + " on " + song[0][1] + " by " + song[0][2]
         if len(str(extra_message)) > 1:
             returnmessage = extra_message + "\n" + returnmessage
-        voteurl = gbsfm_baseurl + '/api/vote?userid=' + str(user_gbsfmid) + '&key=' + user_apikey + '&songid=' + str(song_id) + '&vote=' + str(votenumber)
+        voteurl = config.gbsfm_baseurl + '/api/vote?userid=' + str(user_gbsfmid) + '&key=' + user_apikey + '&songid=' + str(song_id) + '&vote=' + str(votenumber)
         vote_request = urllib.request.urlopen(voteurl)
         vote_request.close()
     else:
