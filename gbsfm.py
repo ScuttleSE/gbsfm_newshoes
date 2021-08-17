@@ -513,10 +513,10 @@ def gbsfm_vote ( vote, user_gbsfmid, user_apikey ):
         if votemode == 'normal_macro':
             returnmessage = "You voted " + vote + " (" + str(votenumber) + ") " + " on " + songtitle + " by " + artist
         if votemode == 'advanced' or votemode == 'advanced_macro':
-            returnmessage = "You voted " + str(vote) + " on " + song[0][1] + " by " + song[0][2]
+            returnmessage = "You voted " + str(vote) + " on " + song[0][2] + " by " + song[0][1]
             print(returnmessage)
         if votemode == 'advanced_macro':
-            returnmessage = "You voted " + str(vote) + " (" + str(votenumber) + ") " + " on " + song[0][1] + " by " + song[0][2]
+            returnmessage = "You voted " + str(vote) + " (" + str(votenumber) + ") " + " on " + song[0][2] + " by " + song[0][1]
         if len(str(extra_message)) > 1:
             returnmessage = extra_message + "\n" + returnmessage
         voteurl = config.gbsfm_baseurl + '/api/vote?userid=' + str(user_gbsfmid) + '&key=' + user_apikey + '&songid=' + str(song_id) + '&vote=' + str(votenumber)
