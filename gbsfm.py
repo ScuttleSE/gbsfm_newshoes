@@ -511,7 +511,7 @@ def gbsfm_vote ( vote, user_gbsfmid, user_apikey ):
         print(votemode)
 
         if votemode == 'normal':
-            returnmessage = "You voted" + vote + " (" + str(votenumber) + ") " + " on " + songtitle + " by " + artist
+            returnmessage = "You voted" + str(vote) + " (" + str(votenumber) + ") " + " on " + songtitle + " by " + artist
         if votemode == 'normal_macro':
             returnmessage = "You voted " + vote + " (" + str(votenumber) + ") " + " on " + songtitle + " by " + artist
         if votemode == 'advanced' or votemode == 'advanced_macro':
