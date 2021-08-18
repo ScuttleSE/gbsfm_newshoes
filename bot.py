@@ -306,6 +306,7 @@ async def on_message(message):
 async def on_raw_reaction_add(reaction):
     vote_emoji = hashlib.md5(reaction.emoji.name.encode("utf-8")).hexdigest()
     voteresult, votestring = gbsfm.gbsfm_reactionvote( vote_emoji, str(reaction.message_id), reaction.user_id)
+    print(voteresult)
     if not voteresult == 'unvoteable':
         channel = client.get_channel(reaction.channel_id)
         await channel.send(votestring)
