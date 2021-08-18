@@ -581,6 +581,7 @@ def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
             voteresult = 'unused_emoji'
             votestring = 'n/a'
 
+    print(queryresult)
     song = gbsfm_query('dongid24no', 0, queryresult[2])
 
     if votenumber == 'fav':
