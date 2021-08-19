@@ -247,7 +247,7 @@ async def on_message(message):
             if valid_group == 1:
                 if message.content.startswith('!restartbot'):
                     await message.channel.send(string_restartdiscord)
-                    subprocess.run(['/shoes/restartstuff.sh', 'gbsfm_shoes-docker', 'hub.hemma.lokal/images/gbsfm_discordbot:latest'])
+                    subprocess.run(['/shoes/restartstuff.sh', 'gbsfm_shoes-docker', 'hub.hemma.lokal/images/gbsfm_discordimage:latest'])
                 elif message.content.startswith('!restartlinkbot'):
                     await message.channel.send(string_restartlinkbot)
                     subprocess.run(['/shoes/restartstuff.sh', 'gbsfm_gbsfm_linkbot', 'hub.hemma.lokal/images/gbsfm_linkbot:latest'])
