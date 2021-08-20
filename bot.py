@@ -34,7 +34,7 @@ wordlist_vote_list             = ["@v", "@vote"]
 wordlist_stream                = ["!newstreampw", "!getstreampw"]
 wordlist_comment               = ["@comment"]
 
-standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list
+standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment
 
 #Triggerwords for add-commands
 wordlist_commandtriggers       = ("@a ", "@add ")
