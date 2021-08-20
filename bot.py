@@ -276,9 +276,9 @@ async def on_message(message):
                         valid_group = 1
             if valid_group == 1:
                 if message.content.startswith('!newstreampw'):
-                    streampw = gbsfm_streampw('set')
+                    streampw = gbsfm.gbsfm_streampw('set')
                 if message.content.startswith('!getstreampw'):
-                    streampw = gbsfm_streampw('get')
+                    streampw = gbsfm.gbsfm_streampw('get')
                 await message.author.send(streampw)
             else:
                 await message.channel.send(string_streampw_denied)
