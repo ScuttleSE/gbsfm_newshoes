@@ -235,7 +235,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         limit 1", [querystring])
 
     db.commit()
-    print("farts")
+    print(query.rowcount)
     if query.rowcount > 0:
         returnlist = []
         row = query.fetchone()
