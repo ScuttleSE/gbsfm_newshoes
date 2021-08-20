@@ -142,7 +142,7 @@ async def on_message(message):
         if add_command[0] == "!":
             add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('title', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
-        #Add title
+        #Add user
         if add_command[0] == ":":
             add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('user', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
