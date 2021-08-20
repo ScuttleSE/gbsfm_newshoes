@@ -115,7 +115,7 @@ def gbsfm_stoats( user_gbsfmid ):
 
 #Query the database for list of songs
 def gbsfm_query( query_type, user_gbsfmid, querystring ):
-    print((query_type, user_gbsfmid, querystring)
+    print(query_type, user_gbsfmid, querystring)
     unformatted = ['sup', 'dongid', 'dongid24no']
     if not query_type in unformatted:
         querystring = '%{}%'.format(querystring)
