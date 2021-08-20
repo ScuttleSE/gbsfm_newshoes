@@ -270,6 +270,7 @@ async def on_message(message):
             await message.channel.send(returnmessage)
         #Stream password stuff
         if any(message.content.startswith(word) for word in wordlist_stream):
+            print('fart')
             valid_group = 0
             for role in message.author.roles:
                     if str(role.id) in list_roles_system: #Needed role to restart shit
