@@ -226,6 +226,7 @@ async def on_message(message):
             for role in message.author.roles:
                     if str(role.id) in list_roles_play_jingle: #Needed role to play jingle
                         valid_group = 1
+                        user_longuid = "<@" + str(user_longuid) + ">"
                         add_success, str_addmessage, added_songid = gbsfm.gbsfm_jingle(user_longuid)
                         if add_success == 1:
                             msgid = await message.channel.send(str_addmessage)
