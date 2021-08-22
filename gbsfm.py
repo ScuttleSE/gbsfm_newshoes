@@ -236,8 +236,8 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
 
     db.commit()
     print(query.rowcount)
+    returnlist = []
     if query.rowcount > 0:
-        returnlist = []
         row = query.fetchone()
         while row is not None:
             returnlist.append(row)
@@ -250,11 +250,6 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
 
 #Play
 def gbsfm_play( query_type, user_gbsfmid, user_apikey, user_longuid, query_string ):
-    print(query_type)
-    print(user_gbsfmid)
-    print(user_apikey)
-    print(user_longuid)
-    print(query_string)
     songlist = gbsfm_query(query_type, user_gbsfmid, query_string)
     if len(songlist) > 0:
         for song in songlist:
