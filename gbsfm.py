@@ -557,6 +557,7 @@ def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
     queryresult = query.fetchone()
 
     if queryresult == None:
+        queryresult = 'none'
         voteresult = 'unvoteable'
         votestring = 'n/a'
     elif len(queryresult) == 3:
