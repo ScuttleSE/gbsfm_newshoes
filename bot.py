@@ -287,17 +287,17 @@ async def on_message(message):
         #Hit or shit
         if any(message.content.startswith(word) for word in wordlist_hitorshit):
             if message.content.startswith('!hit'):
-                print('fart')
+                #print('fart')
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('highrating', user_gbsfmid, user_apikey, user_longuid, 4.8)
+                str_addmessage = 'Added something awesome to the playlist.'
             elif message.content.startswith('!shit'):
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('lowrating', user_gbsfmid, user_apikey, user_longuid, 2)
+                str_addmessage = 'Added something horrible to the playlist.'
             if add_success == 1:
                 msgid = await message.channel.send(str_addmessage)
                 gbsfm.gbsfm_add_botmessage(msgid.id, added_songid)
             if add_success == 0:
                 msgid = await message.channel.send(str_addmessage)
-
-
 
 #Stuff you can do un-authed
 
