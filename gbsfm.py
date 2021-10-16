@@ -256,7 +256,6 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
 #Play
 def gbsfm_play( query_type, user_gbsfmid, user_apikey, user_longuid, query_string ):
     songlist = gbsfm_query(query_type, user_gbsfmid, query_string)
-    print(songlist)
     if len(songlist) > 0:
         for song in songlist:
             #Try to add the songs in the list, bail when one succeeds
