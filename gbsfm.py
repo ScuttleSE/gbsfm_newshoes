@@ -619,7 +619,7 @@ def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
             avgvote = query.fetchone()
             print(avgvote[0])
             voteresult = 'vote'
-            votestring = user_longuid + ' voted ' + str(votenumber) + ' on ' + song[0][2] + ' by ' + song[0][2] + '. It now has an average vote of ' + str(avgvote)
+            votestring = user_longuid + ' voted ' + str(votenumber) + ' on ' + song[0][2] + ' by ' + song[0][2] + '. It now has an average vote of ' + str(avgvote[0])
         except urllib.error.HTTPError as error:
             print(error.code)
             print(error.read())
