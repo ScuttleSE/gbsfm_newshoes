@@ -286,8 +286,8 @@ async def on_message(message):
                 await message.channel.send(string_streampw_denied)
         #Hit or shit
         if any(message.content.startswith(word) for word in wordlist_hitorshit):
-            print('fart')
             if message.content.startswith('!hit'):
+                print('fart')
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('highrating', user_gbsfmid, user_apikey, user_longuid, 4.8)
             elif message.content.startswith('!shit'):
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('lowrating', user_gbsfmid, user_apikey, user_longuid, 2)
