@@ -617,7 +617,7 @@ def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
             query.execute ("SELECT SQL_NO_CACHE cast(avg(score) AS decimal(5,2)) from playlist_rating where song_id = %s", [queryresult[2]])
             db.commit()
             avgvote = query.fetchone()
-            print(avgvote)
+            print(avgvote[0])
             voteresult = 'vote'
             votestring = user_longuid + ' voted ' + str(votenumber) + ' on ' + song[0][2] + ' by ' + song[0][2] + '. It now has an average vote of ' + str(avgvote)
         except urllib.error.HTTPError as error:
