@@ -291,6 +291,13 @@ async def on_message(message):
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('highrating', user_gbsfmid, user_apikey, user_longuid, 4.8)
             elif message.content.startswith('!shit'):
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('lowrating', user_gbsfmid, user_apikey, user_longuid, 2)
+            if add_success == 1:
+                msgid = await message.channel.send(str_addmessage)
+                gbsfm.gbsfm_add_botmessage(msgid.id, added_songid)
+            if add_success == 0:
+                msgid = await message.channel.send(str_addmessage)
+
+
 
 #Stuff you can do un-authed
 
