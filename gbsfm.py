@@ -234,9 +234,9 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         WHERE ps.id = %s \
                         limit 1", [querystring])
     elif query_type == 'lowrating': #Add by low rating
-        query.execute ("SELECT songid, artist, title, album FROM songs_rated WHERE songs_rated.score < 2 order by rand() limit 10")
+        query.execute ("SELECT songid, artist, title, album FROM songs_rated WHERE songs_rated.score < 2 and no_votes > 5 order by rand() limit 10")
     elif query_type == 'highrating': #Add by high rating
-        query.execute ("SELECT songid, artist, title, album FROM songs_rated WHERE songs_rated.score > 4.8 order by rand() limit 10")
+        query.execute ("SELECT songid, artist, title, album FROM songs_rated WHERE songs_rated.score > 4.8 and no_votes > 5 order by rand() limit 10")
 
     db.commit()
     #print(query.rowcount)
