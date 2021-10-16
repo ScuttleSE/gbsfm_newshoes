@@ -33,6 +33,7 @@ wordlist_wa                    = ["@wa"]
 wordlist_vote_list             = ["@v", "@vote"]
 wordlist_stream                = ["!newstreampw", "!getstreampw"]
 wordlist_comment               = ["@comment"]
+wordlist_hitorshit             = ["!hit", "!shit"]
 
 standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment
 
@@ -283,6 +284,12 @@ async def on_message(message):
                 await message.author.send(streampw)
             else:
                 await message.channel.send(string_streampw_denied)
+        #Hit or shit
+        if any(message.content.startswith(word) for word in wordlist_hitorshit):
+            if message.content.startswith('!hit'):
+                add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('highrating', user_gbsfmid, user_apikey, user_longuid, 4.8)
+            elif message.content.startswith('!shit'):
+                add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('lowrating', user_gbsfmid, user_apikey, user_longuid, 2)
 
 #Stuff you can do un-authed
 
