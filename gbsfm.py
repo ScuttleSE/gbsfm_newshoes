@@ -239,7 +239,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
         query.execute ("SELECT songid, artist, title, album FROM songs_rated WHERE songs_rated.score > 4.8 order by rand() limit 10")
 
     db.commit()
-    print(query.rowcount)
+    #print(query.rowcount)
     returnlist = []
     if query.rowcount > 0:
         row = query.fetchone()
@@ -248,6 +248,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
             row = query.fetchone()
     else:
         print('Shiiiiiit')
+    print(returnlist)
     return returnlist #Returns (id, artist, songtitle, album) x up to 10 in a list
 
 # -------------------------------------------------------------------
