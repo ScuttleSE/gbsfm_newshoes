@@ -208,7 +208,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         and ps.id not in (select song_id from playlist_playlistentry) \
                         order by RAND() limit 10", [querystring])
     elif query_type == 'user': #Add by username
-        query.execute ("SELECT playlist_song.id, playlist_song.title, playlist_artist.`name`, playlist_album.`name` as album \
+        query.execute ("SELECT playlist_song.id, playlist_artist.`name`, playlist_song.title, playlist_album.`name` as album \
                         FROM playlist_song \
                         INNER JOIN auth_user ON auth_user.id = playlist_song.uploader_id \
                         INNER JOIN playlist_artist ON playlist_song.artist_id = playlist_artist.id \
