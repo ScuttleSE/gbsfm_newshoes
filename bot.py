@@ -301,7 +301,7 @@ async def on_message(message):
         #Youtube download
         if any(message.content.startswith(word) for word in wordlist_youtubedl):
             msgparts = message.content.split(" ")
-            youtubelink = msgparts[1:]
+            youtubelink = msgparts[1]
             print(youtubelink)
             dl_success, msg = gbsfm.gbsfm_ytdlsong(user_gbsfmid, user_apikey, youtubelink)
             await message.channel.send(msg)
