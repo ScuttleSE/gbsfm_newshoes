@@ -4,6 +4,11 @@ import MySQLdb
 import config
 import urllib.request
 import time
+import base64
+import urllib.parse
+import json
+import yt_dlp
+import os
 
 #Defining database connection
 db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
@@ -627,3 +632,47 @@ def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
             votestring = 'Something went wrong'
 
     return voteresult, votestring
+
+#Downloads song from youtube, then uploads it to gbsfm
+def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
+    upload_url = "https://gbs.fm/api/upload?userid=" + str(userid) + '&key=' + apikey
+    headers = {'Accept': '*/*', 'Content-Type': 'application/x-www-form-urlencoded'}
+    tempfilename = '/tmp/ytdlfile.webm.' + str(int(time.time()))
+    ydl_opts = {
+        'outtmpl': tempfilename,
+        'format': 'bestaudio/best',
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(youtubeclip)
+        info = ydl.sanitize_info(info)
+    os.remove(tempfilename)
+
+    tempfilename = '/tmp/' + info['title'] + '.webm'
+    cliptitle = info['title'] + '.webm'
+    cliplength = info['duration']
+
+    ydl_opts = {
+        'outtmpl': tempfilename,
+        'format': 'bestaudio/best',
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([youtubeclip])
+
+    with open(tempfilename, "rb") as f:
+        input = f.read()
+
+    filedata = base64.urlsafe_b64encode(input).decode('ascii')
+    filedata = dict(filename=cliptitle, filecontents=filedata)
+    filedata = urllib.parse.urlencode(filedata)
+    filedata = filedata.encode('utf-8')
+    request = urllib.request.Request(upload_url, data=filedata, method='POST')
+    try:
+        urllib.request.urlopen(request)
+        dl_success = 1
+        msg = "Song uploaded to the site, I hope to god it's a good one..."
+    except urllib.error.HTTPError as error:
+        errmsg = error.read()
+        msg = "Sorry, " + errmsg.decode('utf-8')
+        dl_success = 0
+    return dl_success, msg

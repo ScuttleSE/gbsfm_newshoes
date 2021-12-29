@@ -34,8 +34,9 @@ wordlist_vote_list             = ["@v", "@vote"]
 wordlist_stream                = ["!newstreampw", "!getstreampw"]
 wordlist_comment               = ["@comment"]
 wordlist_hitorshit             = ["!hit", "!shit"]
+wordlist_youtubedl             = ["!youtube", "!ytdl"]
 
-standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment + wordlist_hitorshit
+standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment + wordlist_hitorshit + wordlist_youtubedl
 
 #Triggerwords for add-commands
 wordlist_commandtriggers       = ("@a ", "@add ")
@@ -297,7 +298,12 @@ async def on_message(message):
                 gbsfm.gbsfm_add_botmessage(msgid.id, added_songid)
             if add_success == 0:
                 msgid = await message.channel.send(str_addmessage)
-
+        #Youtube download
+        if any(message.content.startswith(word) for word in wordlist_youtubedl):
+            msgparts = message.content.split(" ")
+            youtubelink = msgparts[1:]
+            dl_success, msg = gbsfm.gbsfm_ytdlsong(user_gbsfmid, user_apikey, youtubelink)
+            await message.channel.send(msg)
 
 
 #Stuff you can do un-authed
