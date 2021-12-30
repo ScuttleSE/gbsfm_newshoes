@@ -645,7 +645,7 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(youtubeclip)  # this will implicitly download the file
-        info = ydl.sanitize_info(info)
+
 
     cliptitle = info['title'] + '.' + info['ext']
     cliplength = info['duration']
