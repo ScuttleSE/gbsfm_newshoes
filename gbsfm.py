@@ -9,7 +9,6 @@ import urllib.parse
 import json
 import yt_dlp
 import os
-import tempfile
 
 #Defining database connection
 db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
@@ -638,19 +637,29 @@ def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
 def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     upload_url = "https://gbs.fm/api/upload?userid=" + str(userid) + '&key=' + apikey
     headers = {'Accept': '*/*', 'Content-Type': 'application/x-www-form-urlencoded'}
-    tempdl = tempfile.NamedTemporaryFile()
+    tempfilename = '/tmp/ytdlfile.webm.' + str(int(time.time()))
     ydl_opts = {
-        'outtmpl': tempdl.name,
+        'outtmpl': tempfilename,
         'format': 'bestaudio/best',
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(youtubeclip)  # this will implicitly download the file
+        info = ydl.extract_info(youtubeclip)
         info = ydl.sanitize_info(info)
+    os.remove(tempfilename)
 
-    cliptitle = info['title'] + '.' + info['ext']
+    tempfilename = '/tmp/' + info['title'] + '.webm'
+    cliptitle = info['title'] + '.webm'
     cliplength = info['duration']
 
-    with open(tempdl.name, "rb") as f:
+    ydl_opts = {
+        'outtmpl': tempfilename,
+        'format': 'bestaudio/best',
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([youtubeclip])
+
+    with open(tempfilename, "rb") as f:
         input = f.read()
 
     filedata = base64.urlsafe_b64encode(input).decode('ascii')
@@ -666,6 +675,4 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
         errmsg = error.read()
         msg = "Sorry, " + errmsg.decode('utf-8')
         dl_success = 0
-    finally:
-        tempdl.close()  # Will delete the temp file
     return dl_success, msg
