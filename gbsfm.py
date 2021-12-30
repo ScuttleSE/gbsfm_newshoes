@@ -9,7 +9,7 @@ import urllib.parse
 import json
 import yt_dlp
 import os
-import tempdl
+import tempfile
 
 #Defining database connection
 db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
@@ -644,7 +644,10 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
         'format': 'bestaudio/best',
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(youtubeclip)  # this will implicitly download the file
+        info = ydl.extract_info(youtubeclip, download=False)
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([youtubeclip])
 
     cliptitle = info['title'] + '.' + info['ext']
     cliplength = info['duration']
