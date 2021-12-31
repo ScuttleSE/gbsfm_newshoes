@@ -316,6 +316,7 @@ def gbsfm_givetokens( token_recipient, token_recipient_short, token_amount ):
                     discord_auth.user_id = playlist_userprofile.user_id WHERE \
                     discord_auth.discord_id = %s", (token_recipient_short,))
     q_tokens = query.fetchone()
+    print(q_tokens)
     token_current = q_tokens[1]
     token_gbsfmid = q_tokens[0]
     token_new = int(token_amount) + int(token_current)
