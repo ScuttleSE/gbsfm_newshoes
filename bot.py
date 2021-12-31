@@ -211,6 +211,7 @@ async def on_message(message):
                                 token_recipient = token_recipient[1:len(token_recipient)]
                             token_recipient_short = str(message.mentions[0])
                             token_amount = token_message[2]
+                            print(token_recipient)
                             token_response = gbsfm.gbsfm_givetokens(token_recipient, token_recipient_short, token_amount)
                             await message.channel.send(token_response)
                         else:
@@ -315,7 +316,7 @@ async def on_message(message):
             content = message.content.split(' ')
             #user = await client.fetch_user(int(content))
             #print(user)
-            print(content[1][3:31])
+            print(content[1][3:30])
         else:
             await message.channel.send('Denied')
 
