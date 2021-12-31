@@ -306,6 +306,7 @@ async def on_message(message):
             dl_success, msg = gbsfm.gbsfm_ytdlsong(user_gbsfmid, user_apikey, youtubelink)
             await message.channel.send(msg)
         if any(message.content.startswith('!idcheck')):
+            print('farts')
             valid_group = 0
             for role in message.author.roles:
                 if str(role.id) in list_roles_system: #Needed role to restart shit
