@@ -315,7 +315,7 @@ async def on_message(message):
             content = message.content.split(' ')
             #user = await client.fetch_user(int(content))
             #print(user)
-            print(content[1][3:18])
+            print(content[1][3:31])
         else:
             await message.channel.send('Denied')
 
