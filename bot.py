@@ -305,17 +305,17 @@ async def on_message(message):
             print(youtubelink)
             dl_success, msg = gbsfm.gbsfm_ytdlsong(user_gbsfmid, user_apikey, youtubelink)
             await message.channel.send(msg)
-        if any(message.content.startswith('!idcheck')):
-            print('farts')
-            valid_group = 0
-            for role in message.author.roles:
-                if str(role.id) in list_roles_system: #Needed role to restart shit
-                    valid_group = 1
-            if valid_group == 1:
-                content = message.content[9:]
-                print(content)
-            else:
-                await message.channel.send('Denied')
+    if any(message.content.startswith('!idcheck')):
+        print('farts')
+        valid_group = 0
+        for role in message.author.roles:
+            if str(role.id) in list_roles_system: #Needed role to restart shit
+                valid_group = 1
+        if valid_group == 1:
+            content = message.content[9:]
+            print(content)
+        else:
+            await message.channel.send('Denied')
 
 #Stuff you can do un-authed
 
