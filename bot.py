@@ -313,7 +313,8 @@ async def on_message(message):
                 valid_group = 1
         if valid_group == 1:
             content = message.content[9:]
-            print(content)
+            user = await client.fetch_user(int(content))
+            print(user)
         else:
             await message.channel.send('Denied')
 
