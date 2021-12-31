@@ -312,10 +312,10 @@ async def on_message(message):
             if str(role.id) in list_roles_system: #Needed role to restart shit
                 valid_group = 1
         if valid_group == 1:
-            content = message.content[9:]
+            content = message.content.split(' ')
             #user = await client.fetch_user(int(content))
             #print(user)
-            print(content[3:21])
+            print(content)
         else:
             await message.channel.send('Denied')
 
