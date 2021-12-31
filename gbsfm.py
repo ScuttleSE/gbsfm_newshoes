@@ -314,7 +314,7 @@ def gbsfm_givetokens( token_recipient, token_recipient_short, token_amount ):
     query.execute ("SELECT discord_auth.user_id, playlist_userprofile.tokens \
                     FROM discord_auth INNER JOIN playlist_userprofile ON \
                     discord_auth.user_id = playlist_userprofile.user_id WHERE \
-                    discord_auth.discord_id = %s", (token_recipient_short,))
+                    discord_auth.discord_id_long = %s", (str(token_recipient),))
     q_tokens = query.fetchone()
     print(q_tokens)
     token_current = q_tokens[1]
