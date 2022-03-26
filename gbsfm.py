@@ -80,9 +80,12 @@ def gbsfm_addfav( user_gbsfmid, user_longuid ):
     db.commit()
     q_profileid = query.fetchone()
     query = db.cursor()
-    query.execute ("insert into playlist_userprofile_favourites (userprofile_id, song_id) values (%s, %s)", (q_profileid[0], q_nowplaying[0]))
-    db.commit()
     str_response = "Added _" + q_nowplaying[1] + "_ by _" + q_nowplaying[2] + "_ from _" + q_nowplaying[3] + "_ to the favourite-list of " + user_longuid
+    try:
+        query.execute ("insert into playlist_userprofile_favourites (userprofile_id, song_id) values (%s, %s)", (q_profileid[0], q_nowplaying[0]))
+        db.commit()
+    except MySQLdb._exceptions.IntegrityError:
+        str_response = "Dong already in your favourite-list!"
     return str_response
 
 #Function to check if a user has authed. Input their long discord id
