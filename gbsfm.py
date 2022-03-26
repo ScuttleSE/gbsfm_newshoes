@@ -57,6 +57,33 @@ def gbsfm_nowplaying():
     return q_nowplaying[0], q_nowplaying[1], q_nowplaying[2], q_nowplaying[3]
     #Returns song_id, songtitle, artist, album
 
+#Adds the currently playing song to users faves
+def gbsfm_addfav():
+    query = db.cursor()
+    query.execute ("SELECT \
+        playlist_playlistentry.song_id, \
+        playlist_song.title AS songtitle, \
+        playlist_artist.`name` AS artist, \
+        playlist_album.`name` as album \
+        FROM \
+        playlist_playlistentry \
+        INNER JOIN playlist_song ON playlist_playlistentry.song_id = playlist_song.id \
+        INNER JOIN playlist_artist ON playlist_song.artist_id = playlist_artist.id \
+        INNER JOIN playlist_album ON playlist_song.album_id = playlist_album.id \
+        WHERE \
+        playlist_playlistentry.playing = 1")
+    db.commit()
+    q_nowplaying = query.fetchone()
+    query = db.cursor()
+    query.execute ("select id from playlist_userprofile where user_id = %s", (user_gbsfmid,))
+    db.commit()
+    q_profileid = query.fetchone()
+    query = db.cursor()
+    query.execute ("insert into playlist_userprofile_favourites (userprofile_id, song_id) values (%s, %s)", (q_profileid[0], q_nowplaying[0]))
+    db.commit()
+    print(q_profileid[0], q_nowplaying[0])
+    #return str_response
+
 #Function to check if a user has authed. Input their long discord id
 def gbsfm_isauthed( discordid_long ):
     query = db.cursor()
