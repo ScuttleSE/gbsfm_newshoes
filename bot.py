@@ -146,11 +146,11 @@ async def on_message(message):
 
         #Add artist
         if add_command[0] == "/":
-            if check_int(add_command[1:]):
-                print('poop')
+            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+
+        #Add artistid
+        if add_command[0] == "\":
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artistid', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
-            else:
-                add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add title
         if add_command[0] == "!":
