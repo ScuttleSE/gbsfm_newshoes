@@ -149,7 +149,7 @@ async def on_message(message):
             add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add artistid
-        if add_command[0] == "\":
+        if add_command[0] == "\\":
                 add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artistid', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add title
