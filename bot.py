@@ -187,7 +187,7 @@ async def on_message(message):
             await message.author.send(gbsfm.gbsfm_stoats(user_gbsfmid))
         #Fav current song
         if any(message.content.startswith(word) for word in wordlist_faves):
-            await message.author.send(gbsfm.gbsfm_addfav(user_gbsfmid, user_longuid))
+            await message.channel.send(gbsfm.gbsfm_addfav(user_gbsfmid, user_longuid))
         #Add/remove/list role(s)
         if any(message.content.startswith(word) for word in wordlist_roles):
             if message.content.startswith('!listroles'):

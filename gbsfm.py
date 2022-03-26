@@ -59,6 +59,7 @@ def gbsfm_nowplaying():
 
 #Adds the currently playing song to users faves
 def gbsfm_addfav( user_gbsfmid, user_longuid ):
+    user_longuid = "<@" + str(user_longuid) + ">"
     query = db.cursor()
     query.execute ("SELECT \
         playlist_playlistentry.song_id, \
