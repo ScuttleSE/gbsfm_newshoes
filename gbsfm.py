@@ -192,6 +192,15 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         and ps.id not in (select song_id from playlist_oldplaylistentry \
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
                         order by RAND() limit 10", (querystring,))
+    elif query_type == 'artistid': #Query by artistid
+        query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
+                        FROM playlist_song AS ps \
+                        INNER JOIN playlist_album AS pa ON ps.album_id = pa.id \
+                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
+                        WHERE ps.album_id = pa.id and playlist_artist.id = %s \
+                        and ps.id not in (select song_id from playlist_oldplaylistentry \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        order by RAND() limit 10", (querystring,))
     elif query_type == 'title': #Query by title
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
                         FROM playlist_song AS ps \
