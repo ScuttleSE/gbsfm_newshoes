@@ -81,8 +81,8 @@ def gbsfm_addfav( user_gbsfmid ):
     query = db.cursor()
     query.execute ("insert into playlist_userprofile_favourites (userprofile_id, song_id) values (%s, %s)", (q_profileid[0], q_nowplaying[0]))
     db.commit()
-    print(q_profileid[0], q_nowplaying[0])
-    #return str_response
+    str_response = "Added _" + q_nowplaying[1] + "_ by _" + q_nowplaying[2] + "_ from _" + q_nowplaying[3] + "_ to the favourite-list of " + user_longuid
+    return str_response
 
 #Function to check if a user has authed. Input their long discord id
 def gbsfm_isauthed( discordid_long ):
