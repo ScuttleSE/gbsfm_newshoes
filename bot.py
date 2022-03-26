@@ -67,6 +67,14 @@ string_restartircbot           = "Restarting irc-bot..."
 string_no_restart              = "You're not allowed to fiddle with that. Get an admin to help."
 string_streampw_denied         = "You are not allowed to fiddle with the livestream password! Get an admin to help"
 
+#Check if a string can be converted into a int
+def check_int(potential_int):
+    try:
+        int(potential_int)
+        return True
+    except ValueError:
+        return False
+
 #This is a task that updates the "playing" part of the bot
 async def update_playing():
     playing_now = 'NULL'
@@ -138,7 +146,11 @@ async def on_message(message):
 
         #Add artist
         if add_command[0] == "/":
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+            if check_int(add_command[1:]):
+                print('poop')
+                #add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+            else:
+                add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add title
         if add_command[0] == "!":
