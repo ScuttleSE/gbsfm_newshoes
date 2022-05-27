@@ -164,7 +164,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         WHERE NOT \
                         EXISTS (SELECT * FROM playlist_oldplaylistentry \
                         WHERE song_id = ps.id) \
-                        AND playlist_song.banned = 0 \
+                        AND ps.banned = 0 \
                         order by rand() limit 10")
     elif query_type == 'random': #Any random song
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
