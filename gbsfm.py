@@ -164,6 +164,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         WHERE NOT \
                         EXISTS (SELECT * FROM playlist_oldplaylistentry \
                         WHERE song_id = ps.id) \
+                        AND playlist_song.banned = 0 \
                         order by rand() limit 10")
     elif query_type == 'random': #Any random song
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
@@ -181,6 +182,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
                         and playlist_song.id not in (SELECT song_id FROM \
                         playlist_oldplaylistentry WHERE song_id = playlist_song.id) \
+                        AND playlist_song.banned = 0 \
                         order by rand() limit 10", [user_gbsfmid])
     elif query_type == 'userany': #Any song uploaded by the user
         query.execute ("SELECT playlist_song.id, playlist_artist.`name` as artist, playlist_song.title, playlist_album.`name` as album \
@@ -190,6 +192,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         WHERE playlist_song.uploader_id = %s \
                         and playlist_song.id not in (select song_id from playlist_oldplaylistentry \
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        AND playlist_song.banned = 0 \
                         order by rand() limit 10", [user_gbsfmid])
     elif query_type == 'faves': #Any favorite of the user
         query.execute ("SELECT playlist_userprofile_favourites.song_id, \
