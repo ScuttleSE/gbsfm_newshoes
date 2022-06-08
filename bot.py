@@ -49,6 +49,7 @@ wordlist_addlist_unplayed      = ["unplayed", "up"]
 wordlist_addlist_userany       = ["me"]
 wordlist_addlist_faves         = ["fav"]
 wordlist_addlist_short         = ["sup"]
+wordlist_addlist_genre         = ["g", "genre"]
 
 #Various strings and stuff
 string_not_authed_response     = 'Not authed!'
@@ -124,6 +125,10 @@ async def on_message(message):
         #Add any unplayed song
         if any(add_command == word for word in wordlist_addlist_anyunplayed):
             add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('aup', user_gbsfmid, user_apikey, user_longuid, 0)
+
+        #Add song from genre
+        if add_command[0] == "&":
+            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('genre', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add any random song
         if any(add_command == word for word in wordlist_addlist_random):

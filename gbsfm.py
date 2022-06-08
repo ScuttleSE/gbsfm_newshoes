@@ -184,6 +184,15 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         playlist_oldplaylistentry WHERE song_id = playlist_song.id) \
                         AND playlist_song.banned = 0 \
                         order by rand() limit 10", [user_gbsfmid])
+    elif query_type == 'genre': #Any song with specified genre
+        query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
+                        FROM playlist_song AS ps \
+	                    INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
+	                    INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
+                        WHERE NOT EXISTS ( SELECT * FROM playlist_oldplaylistentry WHERE song_id = ps.id ) \
+	                    AND ps.genre like %s \
+	                    AND ps.banned = 0 \
+                        ORDER BY rand() LIMIT 10", (querystring,))
     elif query_type == 'userany': #Any song uploaded by the user
         query.execute ("SELECT playlist_song.id, playlist_artist.`name` as artist, playlist_song.title, playlist_album.`name` as album \
                         FROM playlist_song \
