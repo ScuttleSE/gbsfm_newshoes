@@ -179,7 +179,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON playlist_song.artist_id = playlist_artist.id \
                         WHERE playlist_song.uploader_id = %s \
                         and playlist_song.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         and playlist_song.id not in (SELECT song_id FROM \
                         playlist_oldplaylistentry WHERE song_id = playlist_song.id) \
                         AND playlist_song.banned = 0 \
@@ -189,7 +189,8 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         FROM playlist_song AS ps \
 	                    INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
 	                    INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
-                        WHERE NOT EXISTS ( SELECT * FROM playlist_oldplaylistentry WHERE song_id = ps.id ) \
+                        WHERE ps.id not in (select song_id from playlist_oldplaylistentry \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
 	                    AND ps.genre like %s \
 	                    AND ps.banned = 0 \
                         ORDER BY rand() LIMIT 10", (querystring,))
@@ -200,7 +201,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON playlist_song.artist_id = playlist_artist.id \
                         WHERE playlist_song.uploader_id = %s \
                         and playlist_song.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         AND playlist_song.banned = 0 \
                         order by rand() limit 10", [user_gbsfmid])
     elif query_type == 'faves': #Any favorite of the user
@@ -215,7 +216,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         and playlist_userprofile_favourites.song_id not in \
                         (SELECT playlist_oldplaylistentry.song_id \
                         FROM playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         order by RAND()", [user_gbsfmid])
     elif query_type == 'album': #Query by album
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
@@ -224,7 +225,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         WHERE ps.album_id = pa.id and pa.name LIKE %s \
                         and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         order by RAND() limit 10", (querystring,))
     elif query_type == 'artist': #Query by artist
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
@@ -233,7 +234,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         WHERE ps.album_id = pa.id and playlist_artist.name LIKE %s \
                         and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         order by RAND() limit 10", (querystring,))
     elif query_type == 'artistid': #Query by artistid
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
@@ -242,7 +243,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         WHERE ps.album_id = pa.id and playlist_artist.id = %s \
                         and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         order by RAND() limit 10", (querystring,))
     elif query_type == 'title': #Query by title
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
@@ -251,7 +252,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         WHERE ps.album_id = pa.id and ps.title LIKE %s \
                         and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         and ps.id not in (select song_id from playlist_playlistentry) \
                         order by RAND() limit 10", (querystring,))
     elif query_type == 'sup': #Get short dongs
@@ -261,7 +262,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         WHERE ps.length < %s \
                         and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         and ps.id not in (select song_id from playlist_playlistentry) \
                         order by RAND() limit 10", [querystring])
     elif query_type == 'user': #Add by username
@@ -271,7 +272,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON playlist_song.artist_id = playlist_artist.id \
                         INNER JOIN playlist_album ON playlist_song.album_id = playlist_album.id \
                         where playlist_song.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         and auth_user.username = %s \
                         order by RAND() limit 10", [querystring])
     elif query_type == 'dongid': #Add by dong id
@@ -281,7 +282,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         WHERE ps.id = %s \
                         and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 8*24 HOUR) \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
                         limit 1", [querystring])
     elif query_type == 'dongid24no': #Add by dong id
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
