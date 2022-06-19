@@ -107,6 +107,7 @@ async def on_message(message):
 
     #Here begins general commandtriggers
     if message.content.startswith(wordlist_commandtriggers):
+        print(message.content)
         authbool, user_gbsfmid, user_apikey, user_shortuid, user_longuid = gbsfm.gbsfm_isauthed(message.author.id)
         if authbool == 0:
             await message.channel.send(string_not_authed_response)
