@@ -298,7 +298,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     elif query_type == 'otherfav': #Add by high rating
         discordid_fromuser = querystring[3:21]
         query.execute ("select user_id from discord_auth where discord_id_long = %s", [discordid_fromuser])
-        print(query.fetchone()[1])
+        print(query.fetchone()[0])
     db.commit()
     #print(query.rowcount)
     returnlist = []
