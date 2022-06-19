@@ -296,7 +296,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     elif query_type == 'highrating': #Add by high rating
         query.execute ("SELECT songid, artist, title, album FROM songs_rated WHERE songs_rated.score > 4.8 and no_votes > 5 order by rand() limit 10")
     elif query_type == 'otherfav': #Add by high rating
-        discordid_fromuser = querystring.strip('<@>')
+        discordid_fromuser = mid(querystring, 3, 18)
         print(querystring)
         print(discordid_fromuser)
         query.execute ("select user_id from discord_auth where discord_id_long = %s", [discordid_fromuser])
