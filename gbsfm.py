@@ -298,7 +298,19 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     elif query_type == 'otherfav': #Add by high rating
         discordid_fromuser = querystring[3:21]
         query.execute ("select user_id from discord_auth where discord_id_long = %s", [discordid_fromuser])
-        print(query.fetchone()[0])
+        query.execute ("SELECT playlist_userprofile_favourites.song_id, \
+                        playlist_artist.`name`, playlist_song.title, \
+                        playlist_album.`name`FROM playlist_userprofile \
+                        INNER JOIN playlist_userprofile_favourites ON playlist_userprofile_favourites.userprofile_id = playlist_userprofile.id \
+                        INNER JOIN playlist_song ON playlist_userprofile_favourites.song_id = playlist_song.id AND playlist_userprofile_favourites.song_id = playlist_song.id \
+                        INNER JOIN playlist_artist ON playlist_song.artist_id = playlist_artist.id \
+                        INNER JOIN playlist_album ON playlist_song.album_id = playlist_album.id \
+                        WHERE playlist_userprofile.user_id = %s \
+                        and playlist_userprofile_favourites.song_id not in \
+                        (SELECT playlist_oldplaylistentry.song_id \
+                        FROM playlist_oldplaylistentry \
+                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 90*24 HOUR) \
+                        order by RAND()", [query.fetchone()[0]])
     db.commit()
     #print(query.rowcount)
     returnlist = []
