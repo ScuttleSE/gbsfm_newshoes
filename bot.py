@@ -175,6 +175,10 @@ async def on_message(message):
         if add_command.isnumeric():
             add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('dongid', user_gbsfmid, user_apikey, user_longuid, add_command)
 
+        #Add another users faves
+        if add_command.startswith('<@'):
+            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('otherfav', user_gbsfmid, user_apikey, user_longuid, add_command))
+
         #Send response message
         if add_success == 1:
             msgid = await message.channel.send(str_addmessage)
