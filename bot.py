@@ -377,6 +377,6 @@ async def on_raw_reaction_add(reaction):
         await channel.send(votestring)
 
  #This updates the "game" the bot is playing with the current song
-client.loop.create_task(update_playing())
+#client.loop.create_task(update_playing())
 
 client.run(config.discord_bot_token)
