@@ -12,7 +12,10 @@ import subprocess
 print(config.discord_application_id)
 
 #Defining Discord client
-client = discord.Client()
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 #Waiting for the bot to log in
 @client.event
