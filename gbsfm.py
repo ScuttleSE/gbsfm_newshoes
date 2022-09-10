@@ -39,6 +39,7 @@ def gbsfm_addsong( userid, apikey, songid ):
 
 #Gets the currently playing song
 def gbsfm_nowplaying():
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT \
         playlist_playlistentry.song_id, \
@@ -60,6 +61,7 @@ def gbsfm_nowplaying():
 #Adds the currently playing song to users faves
 def gbsfm_addfav( user_gbsfmid, user_longuid ):
     user_longuid = "<@" + str(user_longuid) + ">"
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT \
         playlist_playlistentry.song_id, \
@@ -90,6 +92,7 @@ def gbsfm_addfav( user_gbsfmid, user_longuid ):
 
 #Function to check if a user has authed. Input their long discord id
 def gbsfm_isauthed( discordid_long ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT * from discord_auth where discord_id_long = %s limit 1", (discordid_long,))
     db.commit()
@@ -111,6 +114,7 @@ def gbsfm_isauthed( discordid_long ):
 
 #Gets user stats
 def gbsfm_stoats( user_gbsfmid ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT count(*) cnt FROM playlist_song ps LEFT OUTER JOIN playlist_oldplaylistentry ope ON ps.id = ope.song_id WHERE ps.uploader_id = %s AND ope.id IS NULL;", (user_gbsfmid,))
     q_unplayed = query.fetchone()
@@ -155,6 +159,7 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     unformatted = ['sup', 'dongid', 'dongid24no', 'user', 'artistid']
     if not query_type in unformatted:
         querystring = '%{}%'.format(querystring)
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     if query_type == 'aup': #Any unplayed song
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
@@ -349,11 +354,13 @@ def gbsfm_play( query_type, user_gbsfmid, user_apikey, user_longuid, query_strin
 
 #Adds a message to the list of botmessages one can react to
 def gbsfm_add_botmessage( msgid, added_songid ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("insert into discord_botmessages (message_id, song_id) values (%s, %s)", (msgid, added_songid))
     db.commit()
 
 def gbsfm_auth( authid, discord_id, discord_id_long ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT auth_user.username, playlist_userprofile.api_key, playlist_userprofile.user_id \
                     FROM auth_user INNER JOIN playlist_userprofile ON auth_user.id = playlist_userprofile.user_id \
@@ -378,6 +385,7 @@ def gbsfm_auth( authid, discord_id, discord_id_long ):
 
 #Give tokens
 def gbsfm_givetokens( token_recipient, token_recipient_short, token_amount ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT discord_auth.user_id, playlist_userprofile.tokens \
                     FROM discord_auth INNER JOIN playlist_userprofile ON \
@@ -395,6 +403,7 @@ def gbsfm_givetokens( token_recipient, token_recipient_short, token_amount ):
 
 #Check tokens
 def gbsfm_gettokens( user_gbsfmid, user_longuid ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT playlist_userprofile.tokens FROM playlist_userprofile WHERE playlist_userprofile.user_id = %s", (user_gbsfmid,))
     q_tokens = query.fetchone()
@@ -408,6 +417,7 @@ def gbsfm_jingle( user_longuid ):
 
 #Check when your next dong is playing
 def gbsfm_when ( user_gbsfmid ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("SELECT playlist_playlistentry.song_id, playlist_playlistentry.adder_id, \
                     playlist_playlistentry.playtime, playlist_playlistentry.playing, \
@@ -605,6 +615,7 @@ def gbsfm_vote ( vote, user_gbsfmid, user_apikey ):
     return  votesuccess, returnmessage
 
 def gbsfm_streampw( getorset ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     if getorset == 'get':
         query = db.cursor()
         query.execute ("select `value` from playlist_settings WHERE `key`='stream_password'")
@@ -620,6 +631,7 @@ def gbsfm_streampw( getorset ):
     return passwordstring
 
 def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     votelist_1 = ["6e155540116de9dcf5f233191cce07b0"]
     votelist_2 = ["fd1e1b476fadbaa7125fa9d64b3b7629"]
     votelist_3 = ["66575d5498439e1c15cb5023c22eb808"]
@@ -630,6 +642,7 @@ def gbsfm_reactionvote( vote_emoji, message_id, discord_userid_long ):
     votenumber = 0
 
     #Check if the message is voteable
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("select * from discord_botmessages where message_id = %s limit 1", [message_id])
     db.commit()
