@@ -279,16 +279,16 @@ async def on_message(message):
             if valid_group == 1:
                 if message.content.startswith('!restartbot'):
                     await message.channel.send(string_restartdiscord)
-                    subprocess.run(['/shoes/restartstuff.sh', 'gbsfm_shoes-docker', 'hub.hemma.lokal/images/gbsfm_discordimage:latest'])
+                    subprocess.run(['curl', '-s', 'http://controller/restart-discordbot.sh'])
                 elif message.content.startswith('!restartlinkbot'):
                     await message.channel.send(string_restartlinkbot)
-                    subprocess.run(['/shoes/restartstuff.sh', 'gbsfm_gbsfm_linkbot', 'hub.hemma.lokal/images/gbsfm_linkbot:latest'])
+                    subprocess.run(['curl', '-s', 'http://controller/restart-linkbot.sh'])
                 elif message.content.startswith('!restartftp'):
                     await message.channel.send(string_restartftp)
-                    subprocess.run(['/shoes/restartftp.sh'])
+                    subprocess.run(['curl', '-s', 'http://controller/restart-ftp.sh'])
                 elif message.content.startswith('!restartirc'):
                     await message.channel.send(string_restartircbot)
-                    subprocess.run(['/shoes/restartstuff.sh', 'gbsfm_socks-docker', 'hub.hemma.lokal/images/gbsfm-ircbot:latest'])
+                    subprocess.run(['curl', '-s', 'http://controller/restart-ircbot.sh'])
             else:
                 await message.channel.send(string_no_restart)
         #Wolfram Alpha
