@@ -391,13 +391,16 @@ def gbsfm_givetokens( token_recipient, token_recipient_short, token_amount ):
                     FROM discord_auth INNER JOIN playlist_userprofile ON \
                     discord_auth.user_id = playlist_userprofile.user_id WHERE \
                     discord_auth.discord_id_long = %s", (str(token_recipient),))
+    db.commit()
     q_tokens = query.fetchone()
     print(q_tokens)
     token_current = q_tokens[1]
     token_gbsfmid = q_tokens[0]
     token_new = int(token_amount) + int(token_current)
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("update playlist_userprofile set tokens = %s where user_id = %s", (token_new, token_gbsfmid))
+    db.commit()
     token_response = "You gave <@" + str(token_recipient) + "> " + str(token_amount) + " token(s)"
     return token_response
 
