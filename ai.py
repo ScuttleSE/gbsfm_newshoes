@@ -17,7 +17,6 @@ def ai_query( query ):
             frequency_penalty=0.5,
             presence_penalty=0
         )
-        print(response.choices[0].text[9:])
         airesponse = (response.choices[0].text[9:])
     except:
         airesponse = "Wuh?"
