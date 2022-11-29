@@ -41,7 +41,7 @@ wordlist_hitorshit             = ["!hit", "!shit"]
 wordlist_youtubedl             = ["!youtube", "!ytdl"]
 wordlist_faves                 = ["@fav", "@wuv"]
 wordlist_botid                 = ["<@503268924876652544>"] # Discord id for the bot
-wordlist_aichannel             = "1047214372537254020"
+wordlist_aichannel             = 1047214372537254020
 
 standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment + wordlist_hitorshit + wordlist_youtubedl + wordlist_faves
 
