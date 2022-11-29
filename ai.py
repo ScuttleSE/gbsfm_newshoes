@@ -3,7 +3,7 @@
 import openai
 import config
 
-openai.api_key = "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"
+openai.api_key = ""
 
 def ai_query( query ):
     try:
