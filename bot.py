@@ -5,6 +5,7 @@ import discord
 import gbsfm
 import asyncio
 import hashlib
+import ai
 import wa
 import playing
 import subprocess
@@ -39,6 +40,7 @@ wordlist_comment               = ["@comment"]
 wordlist_hitorshit             = ["!hit", "!shit"]
 wordlist_youtubedl             = ["!youtube", "!ytdl"]
 wordlist_faves                 = ["@fav", "@wuv"]
+wordlist_botid                 = ["<@503268924876652544>"] # Discord id for the bot
 
 standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment + wordlist_hitorshit + wordlist_youtubedl + wordlist_faves
 
@@ -297,6 +299,11 @@ async def on_message(message):
         if any(message.content.startswith(word) for word in wordlist_wa):
             waquery = message.content.split(" ", 1)
             await message.channel.send(wa.wa_query(waquery[1]))
+        #OpenAI
+        if any(message.content.startswith(word) for word in wordlist_botid):
+            aiquery = message.content.split(" ", 1)
+            print(ai.ai_query(aiquery[1])
+            #await message.channel.send(wa.wa_query(waquery[1]))
         #Voting
         if any(message.content.startswith(word) for word in wordlist_vote_list):
             voteparts = message.content.split(" ")
