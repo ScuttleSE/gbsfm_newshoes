@@ -299,12 +299,6 @@ async def on_message(message):
         if any(message.content.startswith(word) for word in wordlist_wa):
             waquery = message.content.split(" ", 1)
             await message.channel.send(wa.wa_query(waquery[1]))
-        #OpenAI
-        if message.content[2:20] == '503268924876652544':
-            print('hooked')
-            aiquery = message.content.split(" ", 1)
-            print(ai.ai_query(aiquery[1]))
-            #await message.channel.send(wa.wa_query(waquery[1]))
         #Voting
         if any(message.content.startswith(word) for word in wordlist_vote_list):
             voteparts = message.content.split(" ")
@@ -357,6 +351,12 @@ async def on_message(message):
             print(content[1][3:30])
         else:
             await message.channel.send('Denied')
+    #OpenAI
+    if any(message.content.startswith(word) for word in wordlist_botid):
+        print('hooked')
+        aiquery = message.content.split(" ", 1)
+        print(ai.ai_query(aiquery[1]))
+        #await message.channel.send(wa.wa_query(waquery[1]))
 
 #Stuff you can do un-authed
 
