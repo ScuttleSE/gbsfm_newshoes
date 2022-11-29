@@ -353,7 +353,7 @@ async def on_message(message):
             await message.channel.send('Denied')
     #OpenAI
     if any(message.content.startswith(word) for word in wordlist_botid):
-        print(message.channel_id)
+        print(message.channel.channel_id)
         aiquery = message.content.split(" ", 1)
         await message.channel.send(ai.ai_query(aiquery[1]))
 
