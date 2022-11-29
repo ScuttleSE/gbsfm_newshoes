@@ -302,7 +302,7 @@ async def on_message(message):
         #OpenAI
         if any(message.content.startswith(word) for word in wordlist_botid):
             aiquery = message.content.split(" ", 1)
-            print(ai.ai_query(aiquery[1])
+            print(ai.ai_query(aiquery[1]))
             #await message.channel.send(wa.wa_query(waquery[1]))
         #Voting
         if any(message.content.startswith(word) for word in wordlist_vote_list):
