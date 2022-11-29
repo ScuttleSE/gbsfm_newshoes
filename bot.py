@@ -300,7 +300,7 @@ async def on_message(message):
             waquery = message.content.split(" ", 1)
             await message.channel.send(wa.wa_query(waquery[1]))
         #OpenAI
-        if any(message.content.startswith(word) for word in wordlist_botid):
+        if message.content[2:20] == '503268924876652544':
             print('hooked')
             aiquery = message.content.split(" ", 1)
             print(ai.ai_query(aiquery[1]))
