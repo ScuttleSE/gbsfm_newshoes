@@ -104,7 +104,7 @@ async def update_playing():
 @client.event
 async def on_message(message):
     #Debug
-    print(message.content)
+    #print(message.content)
     if message.author == client.user: #Don't respond to my own messages
         return
     if str(message.author.id) in config.discord_ignored_ids: #Don't respond to these user ids
