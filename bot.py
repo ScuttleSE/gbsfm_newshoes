@@ -355,6 +355,7 @@ async def on_message(message):
     #OpenAI
     if any(message.content.startswith(word) for word in wordlist_botid):
         aichannel = client.get_channel(wordlist_aichannel)
+        print(aichannel)
         aiquery = message.content.split(" ", 1)
         await aichannel.send(ai.ai_query(aiquery[1]))
 
