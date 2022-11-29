@@ -41,6 +41,7 @@ wordlist_hitorshit             = ["!hit", "!shit"]
 wordlist_youtubedl             = ["!youtube", "!ytdl"]
 wordlist_faves                 = ["@fav", "@wuv"]
 wordlist_botid                 = ["<@503268924876652544>"] # Discord id for the bot
+wordlist_aichannel             = "1047214372537254020"
 
 standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment + wordlist_hitorshit + wordlist_youtubedl + wordlist_faves
 
@@ -353,9 +354,9 @@ async def on_message(message):
             await message.channel.send('Denied')
     #OpenAI
     if any(message.content.startswith(word) for word in wordlist_botid):
-        print(message.channel.channel_id)
+        aichannel = client.get_channel(wordlist_aichannel)
         aiquery = message.content.split(" ", 1)
-        await message.channel.send(ai.ai_query(aiquery[1]))
+        await aichannel.send(ai.ai_query(aiquery[1]))
 
 #Stuff you can do un-authed
 
