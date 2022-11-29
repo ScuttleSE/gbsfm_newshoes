@@ -354,8 +354,7 @@ async def on_message(message):
     #OpenAI
     if any(message.content.startswith(word) for word in wordlist_botid):
         aiquery = message.content.split(" ", 1)
-        print(ai.ai_query(aiquery[1]))
-        await message.channel.send(wa.wa_query(aiquery[1]))
+        await message.channel.send(ai.ai_query(aiquery[1]))
 
 #Stuff you can do un-authed
 
