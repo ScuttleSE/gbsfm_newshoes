@@ -5,19 +5,21 @@ import config
 
 openai.api_key = config.openai_token
 
-def ai_query( query ):
+chatgpt_behaviour = "You are a Discord chatbot named Shoes that reluctantly answers questions with sarcastic and witty responses."
+
+def ai_query( query, prompthistory ):
     try:
-        promptstring = 'Shoes is a chatbot that reluctantly answers questions with sarcastic responses:\n You: ' + query
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=promptstring,
-            temperature=0.5,
-            max_tokens=60,
-            top_p=0.3,
-            frequency_penalty=0.5,
-            presence_penalty=0
+        jsonstring = [{"role": "system", "content": chatgpt_behaviour}]
+        for prompt in range(0,len(prompthistory)):
+            if len(prompthistory[prompt]) == 2:
+                jsonstring.append({'role': 'user', 'content': prompthistory[prompt][1]})
+            if len(prompthistory[prompt]) > 4:
+                jsonstring.append({'role': 'assistant', 'content': prompthistory[prompt][6:]})
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=jsonstring
         )
-        airesponse = (response.choices[0].text[9:])
+        airesponse = (response.choices[0].message.content)
     except:
         airesponse = "Wuh?"
     return airesponse
