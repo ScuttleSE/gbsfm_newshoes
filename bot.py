@@ -363,10 +363,11 @@ async def on_message(message):
         aiquery = message.content.split(" ", 1)
         chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(aiquery)
-        print(chatgpt_promptqueue)
         response = ai.ai_query(aiquery[1])
+        chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(response)
         await aichannel.send(response)
+        print(chatgpt_promptqueue)
 
 #Stuff you can do un-authed
 
