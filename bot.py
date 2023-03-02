@@ -75,6 +75,9 @@ string_restartircbot           = "Restarting irc-bot..."
 string_no_restart              = "You're not allowed to fiddle with that. Get an admin to help."
 string_streampw_denied         = "You are not allowed to fiddle with the livestream password! Get an admin to help"
 
+chatgpt_promptlist             = ['NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL']
+chatgpt_promptqueue = deque(chatgpt_promptlist)
+
 #Check if a string can be converted into a int
 def check_int(potential_int):
     try:
@@ -357,6 +360,9 @@ async def on_message(message):
         aichannel = client.get_channel(wordlist_aichannel)
         print(aichannel)
         aiquery = message.content.split(" ", 1)
+        chatgpt_promptqueue() #delete first
+        chatgpt_promptqueue.append(aiquery)
+        print(chatgpt_promptqueue)
         await aichannel.send(ai.ai_query(aiquery[1]))
 
 #Stuff you can do un-authed
