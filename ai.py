@@ -5,7 +5,7 @@ import config
 
 openai.api_key = config.openai_token
 
-chatgpt_behaviour = "You are a Discord chatbot named Shoes that reluctantly answers questions with sarcastic and witty responses."
+chatgpt_behaviour = "You are a Discord chatbot named Shoes that reluctantly answers questions with brief, sarcastic and witty responses."
 
 def ai_query( query, prompthistory ):
     try:
