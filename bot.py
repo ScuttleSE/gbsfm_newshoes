@@ -76,7 +76,7 @@ string_restartircbot           = "Restarting irc-bot..."
 string_no_restart              = "You're not allowed to fiddle with that. Get an admin to help."
 string_streampw_denied         = "You are not allowed to fiddle with the livestream password! Get an admin to help"
 
-chatgpt_promptlist             = ['NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL']
+chatgpt_promptlist             = ['NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL']
 chatgpt_promptqueue = deque(chatgpt_promptlist)
 
 #Check if a string can be converted into a int
