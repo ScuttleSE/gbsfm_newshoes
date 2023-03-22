@@ -367,7 +367,7 @@ async def on_message(message):
         response_savestring = '*BOT* ' + ' '.join(response)
         chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(response_savestring)
-        for chunk in range(0,len(chunks)):
+        for chunk in range(0,len(response)):
             await aichannel.send(response[chunk])
         print(chatgpt_promptqueue)
 
