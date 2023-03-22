@@ -364,7 +364,7 @@ async def on_message(message):
         chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(aiquery)
         response = ai.ai_query(aiquery[1], chatgpt_promptqueue)
-        response_savestring = '*BOT* ' + response
+        response_savestring = '*BOT* ' + ' '.join(response)
         chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(response_savestring)
         for chunk in range(0,len(chunks)):
