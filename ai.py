@@ -17,7 +17,7 @@ def ai_query( query, prompthistory ):
                 jsonstring.append({'role': 'assistant', 'content': prompthistory[prompt][6:]})
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            max_tokens = 2000
+            max_tokens = 2000,
             messages=jsonstring
         )
         airesponse = (response.choices[0].message.content)
