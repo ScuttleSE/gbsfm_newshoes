@@ -367,7 +367,8 @@ async def on_message(message):
         response_savestring = '*BOT* ' + response
         chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(response_savestring)
-        await aichannel.send(response)
+        for chunk in range(0,len(chunks)):
+            await aichannel.send(response[chunk])
         print(chatgpt_promptqueue)
 
 #Stuff you can do un-authed
