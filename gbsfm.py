@@ -752,3 +752,28 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     finally:
         os.remove(tempfilename)
     return dl_success, msg
+
+def gbsfm_undo( user_gbsfmid, user_longuid ):
+    query = db.cursor()
+    query.execute ("select * from playlist_playlistentry where adder_id = %s", user_gbsfmid)
+    db.commit()
+    queryresult = query.fetchone()
+
+    if queryresult == None:
+        msg = user_longuid "does not have any upcoming songs on the playlist."
+    elif queryresult[5] == 1:
+        msg = user_longuid ' tried to delete the \"song\" you are currently listening to, too late!'
+    elif queryresult[7] == 1:
+        query = db.cursor()
+        query.execute ("delete from playlist_playlistentry where id = %s", queryresult[5])
+        db.commit()
+        query = db.cursor()
+        query.execute ("update playlist_userprofile set tokens = tokens + 1 where user_id = %s", user_gbsfmid)
+        db.commit()
+        msg = 'The most recent song added by ' + user_longuid + ' to the playlist was deleted and the token was returned.'
+    else:
+        query = db.cursor()
+        query.execute ("delete from playlist_playlistentry where id = %s", queryresult[5])
+        db.commit()
+        msg = 'The most recent song added by ' + user_longuid + ' to the playlist was deleted'
+    return msg

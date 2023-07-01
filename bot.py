@@ -43,8 +43,9 @@ wordlist_youtubedl             = ["!youtube", "!ytdl"]
 wordlist_faves                 = ["@fav", "@wuv"]
 wordlist_botid                 = ["<@503268924876652544>"] # Discord id for the bot
 wordlist_aichannel             = 1047214372537254020
+wordlist_undo                  = ["!undo"]
 
-standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment + wordlist_hitorshit + wordlist_youtubedl + wordlist_faves
+standalone_wordlist_all        = wordlist_stoat_list + wordlist_roles + wordlist_tokens + wordlist_jingle + wordlist_when + wordlist_system + wordlist_wa + wordlist_vote_list + wordlist_stream + wordlist_comment + wordlist_hitorshit + wordlist_youtubedl + wordlist_faves + wordlist_undo
 
 #Triggerwords for add-commands
 wordlist_commandtriggers       = ("@a ", "@add ")
@@ -343,6 +344,11 @@ async def on_message(message):
             print(youtubelink)
             dl_success, msg = gbsfm.gbsfm_ytdlsong(user_gbsfmid, user_apikey, youtubelink)
             await message.channel.send(msg)
+        #Fav current song
+        if any(message.content.startswith(word) for word in wordlist_undo):
+            msg = gbsfm.gbsfm_undo(user_gbsfmid, user_longuid)
+            await message.channel.send(msg)
+
     if message.content.startswith('!idcheck'):
         print('farts')
         valid_group = 0
