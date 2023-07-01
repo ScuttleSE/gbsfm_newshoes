@@ -754,6 +754,7 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     return dl_success, msg
 
 def gbsfm_undo( user_gbsfmid, user_longuid ):
+    print(user_gbsfmid)
     query = db.cursor()
     query.execute ("select * from playlist_playlistentry where adder_id = %s", user_gbsfmid)
     db.commit()
