@@ -755,7 +755,7 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
 
 def gbsfm_undo( user_gbsfmid, user_longuid ):
     query = db.cursor()
-    query.execute ("select * from playlist_playlistentry where adder_id = %s", [user_gbsfmid])
+    query.execute ("select * from playlist_playlistentry where adder_id = %s order by id desc", [user_gbsfmid])
     db.commit()
     queryresult = query.fetchone()
     print(queryresult)
@@ -773,7 +773,7 @@ def gbsfm_undo( user_gbsfmid, user_longuid ):
         msg = user_longuid + ' tried to delete the \"song\" you are currently listening to, too late!'
     elif queryresult[7] == 1:
         query = db.cursor()
-        query.execute ("delete from playlist_playlistentry where id = %s", [queryresult[5]])
+        query.execute ("delete from playlist_playlistentry where id = %s", [queryresult[0]])
         db.commit()
         query = db.cursor()
         query.execute ("update playlist_userprofile set tokens = tokens + 1 where user_id = %s", [user_gbsfmid])
@@ -781,7 +781,7 @@ def gbsfm_undo( user_gbsfmid, user_longuid ):
         msg = 'The most recent song added by ' + user_longuid + ' to the playlist was deleted and the token was returned.'
     else:
         query = db.cursor()
-        query.execute ("delete from playlist_playlistentry where id = %s", [queryresult[5]])
+        query.execute ("delete from playlist_playlistentry where id = %s", [queryresult[0]])
         db.commit()
         msg = 'The most recent song added by ' + user_longuid + ' to the playlist was deleted'
     return msg
