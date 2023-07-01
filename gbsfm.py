@@ -759,14 +759,6 @@ def gbsfm_undo( user_gbsfmid, user_longuid ):
     db.commit()
     queryresult = query.fetchone()
     print(queryresult)
-    print(queryresult[0])
-    print(queryresult[1])
-    print(queryresult[2])
-    print(queryresult[3])
-    print(queryresult[4])
-    print(queryresult[5])
-    print(queryresult[6])
-    print(queryresult[7])
     if queryresult == None:
         msg = user_longuid + "does not have any upcoming songs on the playlist."
     elif queryresult[5] == 1:
