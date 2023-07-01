@@ -760,9 +760,9 @@ def gbsfm_undo( user_gbsfmid, user_longuid ):
     queryresult = query.fetchone()
 
     if queryresult == None:
-        msg = user_longuid "does not have any upcoming songs on the playlist."
+        msg = user_longuid + "does not have any upcoming songs on the playlist."
     elif queryresult[5] == 1:
-        msg = user_longuid ' tried to delete the \"song\" you are currently listening to, too late!'
+        msg = user_longuid + ' tried to delete the \"song\" you are currently listening to, too late!'
     elif queryresult[7] == 1:
         query = db.cursor()
         query.execute ("delete from playlist_playlistentry where id = %s", queryresult[5])
