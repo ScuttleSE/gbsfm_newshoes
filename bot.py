@@ -346,6 +346,7 @@ async def on_message(message):
             await message.channel.send(msg)
         #Fav current song
         if any(message.content.startswith(word) for word in wordlist_undo):
+            user_longuid = "<@" + str(user_longuid) + ">"
             msg = gbsfm.gbsfm_undo(user_gbsfmid, user_longuid)
             await message.channel.send(msg)
 
