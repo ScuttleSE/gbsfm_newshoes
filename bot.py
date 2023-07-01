@@ -344,10 +344,13 @@ async def on_message(message):
             print(youtubelink)
             dl_success, msg = gbsfm.gbsfm_ytdlsong(user_gbsfmid, user_apikey, youtubelink)
             await message.channel.send(msg)
-        #Fav current song
+        #Undo last added dong
         if any(message.content.startswith(word) for word in wordlist_undo):
-            user_longuid = "<@" + str(user_longuid) + ">"
-            msg = gbsfm.gbsfm_undo(user_gbsfmid, user_longuid)
+            if user_gbsfmid = 73:
+                msg = 'Yeah, no...'
+            else:
+                user_longuid = "<@" + str(user_longuid) + ">"
+                msg = gbsfm.gbsfm_undo(user_gbsfmid, user_longuid)
             await message.channel.send(msg)
 
     if message.content.startswith('!idcheck'):
