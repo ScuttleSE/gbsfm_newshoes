@@ -346,7 +346,7 @@ async def on_message(message):
             await message.channel.send(msg)
         #Undo last added dong
         if any(message.content.startswith(word) for word in wordlist_undo):
-            if user_gbsfmid = 73:
+            if user_gbsfmid == 73:
                 msg = 'Yeah, no...'
             else:
                 user_longuid = "<@" + str(user_longuid) + ">"
