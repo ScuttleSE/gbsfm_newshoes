@@ -754,6 +754,7 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     return dl_success, msg
 
 def gbsfm_undo( user_gbsfmid, user_longuid ):
+    db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     query.execute ("select * from playlist_playlistentry where adder_id = %s order by id desc", [user_gbsfmid])
     db.commit()
