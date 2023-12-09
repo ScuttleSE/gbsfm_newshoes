@@ -368,12 +368,16 @@ async def on_message(message):
             await message.channel.send('Denied')
     #OpenAI
     if any(message.content.startswith(word) for word in wordlist_botid):
+        if message.attachments:
+            attachement_url = message.attachments[0].url
+        else:
+            attachement_url = None
         aichannel = client.get_channel(wordlist_aichannel)
         print(aichannel)
         aiquery = message.content.split(" ", 1)
         chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(aiquery)
-        response = ai.ai_query(aiquery[1], chatgpt_promptqueue)
+        response = ai.ai_query(aiquery[1], chatgpt_promptqueue, attachement_url)
         response_savestring = '*BOT* ' + ' '.join(response)
         chatgpt_promptqueue.popleft() #delete first
         chatgpt_promptqueue.append(response_savestring)
