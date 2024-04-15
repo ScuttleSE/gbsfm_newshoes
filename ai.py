@@ -46,7 +46,7 @@ def ai_query( query, prompthistory, attachement ):
         base64_image = base64.b64encode(imagefile.content).decode('utf-8')
         headers = {
           "Content-Type": "application/json",
-          "Authorization": f"Bearer" config.openai_token
+          "Authorization": f"Bearer {config.openai_token}"
         }
         payload = {
           "model": "gpt-4-vision-preview",
