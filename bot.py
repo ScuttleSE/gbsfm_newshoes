@@ -384,9 +384,11 @@ async def on_message(message):
         for chunk in range(0,len(response)):
             await aichannel.send(response[chunk])
         print(chatgpt_promptqueue)
-    if message.content.startswith('!9ball'):
-        aiquery = message.content.split(" ", 1)
+    if message.content.startswith('!nineball'):
+        print(message.content)
+        aiquery = message.content.split("!nineball", 1)[1].strip()
         response = ai.ai_9ball(aiquery)
+        print(response)
         await message.channel.send(response)
 
 #Stuff you can do un-authed
