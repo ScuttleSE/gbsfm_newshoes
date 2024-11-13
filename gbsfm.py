@@ -726,8 +726,7 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     ydl_opts = {
         'outtmpl': tempfilename,
         'format': 'bestaudio/best',
-        'username': 'oauth2',
-        'password': ''
+        'cookiefile': '/shoes/cookies.txt'
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(youtubeclip, download=True)
