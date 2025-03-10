@@ -20,7 +20,7 @@ def playingquestion():
             artwork = musicbrainzngs.get_release_group_image_list(mb_releases[0]['id'])
             artwork = artwork['images'][0]['thumbnails']['small']
         except:
-            artwork = "https://img.gbs.fm/noSu9/" + random.choice(dickbutts)
+            artwork = "https://img.gbs.fm/noSu9/" + random.choice(dickbutts) + '/raw'
     else:
         #No musicbrainz-result? Check iTunes
         cpy = coverpy.CoverPy()
