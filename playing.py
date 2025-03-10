@@ -7,7 +7,7 @@ import random
 import config
 from gbsfm import gbsfm_nowplaying as nowplaying
 
-dickbutts = ['dickbutt.jpeg', 'diskobees.png', 'diskobutt.png', 'dongarse.jpg', 'heisenbutt.png', 'antibutt.jpg']
+dickbutts = ['JALUmala61.jpg', 'YeLIRucI11.jpeg', 'qEfOQExO70.png', 'tEporuya35.png', 'BEbowuPi43.jpg', 'SufExAja57.png']
 
 def playingquestion():
     song_id, search_art_song, search_art_artist, search_art_album = nowplaying()
@@ -20,7 +20,7 @@ def playingquestion():
             artwork = musicbrainzngs.get_release_group_image_list(mb_releases[0]['id'])
             artwork = artwork['images'][0]['thumbnails']['small']
         except:
-            artwork = "https://www2.almstrom.org/disc/" + random.choice(dickbutts)
+            artwork = "https://img.gbs.fm/noSu9/" + random.choice(dickbutts)
     else:
         #No musicbrainz-result? Check iTunes
         cpy = coverpy.CoverPy()
@@ -30,7 +30,7 @@ def playingquestion():
             # Set a size for the artwork (first parameter) and get the result url.
             artwork = result.artwork(300)
         except:
-            artwork = "https://www2.almstrom.org/disc/" + random.choice(dickbutts)
+            artwork = "https://img.gbs.fm/noSu9/" + random.choice(dickbutts)
 
     get_art = urllib.request.urlopen(artwork)
     artwork=get_art.geturl()
