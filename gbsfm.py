@@ -9,6 +9,7 @@ import urllib.parse
 import json
 import yt_dlp
 import os
+import glob
 
 #Defining database connection
 db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
@@ -192,12 +193,12 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     elif query_type == 'genre': #Any song with specified genre
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM playlist_song AS ps \
-	                    INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
-	                    INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
+                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
+                        INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
                         WHERE ps.id not in (select song_id from playlist_oldplaylistentry \
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 7*24 HOUR) \
-	                    AND ps.genre like %s \
-	                    AND ps.banned = 0 \
+                        AND ps.genre like %s \
+                        AND ps.banned = 0 \
                         ORDER BY rand() LIMIT 10", (querystring,))
     elif query_type == 'userany': #Any song uploaded by the user
         query.execute ("SELECT playlist_song.id, playlist_artist.`name` as artist, playlist_song.title, playlist_album.`name` as album \
@@ -723,10 +724,16 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     upload_url = "https://gbs.fm/api/upload?userid=" + str(userid) + '&key=' + apikey
     headers = {'Accept': '*/*', 'Content-Type': 'application/x-www-form-urlencoded'}
     tempfilename = '/tmp/ytdlfile.' + str(int(time.time()))
+    filename = ''
     ydl_opts = {
         'outtmpl': tempfilename,
         'format': 'bestaudio/best',
-        'cookiefile': '/shoes/cookies.txt'
+        'cookiefile': '/shoes/cookies.txt',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio'
+        }]
+        # 'username': 'oauth2',
+        # 'password': ''
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(youtubeclip, download=True)
@@ -734,8 +741,11 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     cliptitle = info['title'] + '.' + info['ext']
     cliplength = info['duration']
 
-    with open(tempfilename, "rb") as f:
-        input = f.read()
+    # ytdlp extracts audio after download now, so open with wildcard (unknown extension)
+    for filename in glob.glob(tempfilename + '.*'):
+        with open(filename, "rb") as f:
+            input = f.read()
+        break
 
     filedata = base64.urlsafe_b64encode(input).decode('ascii')
     filedata = dict(filename=cliptitle, filecontents=filedata)
@@ -751,7 +761,7 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
         msg = "Sorry, " + errmsg.decode('utf-8')
         dl_success = 0
     finally:
-        os.remove(tempfilename)
+        os.remove(filename)
     return dl_success, msg
 
 def gbsfm_undo( user_gbsfmid, user_longuid ):
