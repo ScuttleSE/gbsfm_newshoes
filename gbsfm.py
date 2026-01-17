@@ -731,7 +731,9 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
         'cookiefile': '/shoes/cookies.txt',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio'
-        }]
+        }],                                                                                                                         
+        'js_runtimes': {'node': {'path': '/usr/bin/node'}},                                                                               
+        'remote_components': ['ejs:github']
         # 'username': 'oauth2',
         # 'password': ''
     }
