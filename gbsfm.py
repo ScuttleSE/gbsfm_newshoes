@@ -193,8 +193,8 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     elif query_type == 'genre': #Any song with specified genre
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM playlist_song AS ps \
-	                    INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
-	                    INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
+                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
+                        INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
                         WHERE ps.id not in (select song_id from playlist_oldplaylistentry \
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 7*24 HOUR) \
 	                    AND ps.genre like %s \
