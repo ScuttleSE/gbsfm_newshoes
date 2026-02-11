@@ -193,12 +193,12 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     elif query_type == 'genre': #Any song with specified genre
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM playlist_song AS ps \
-                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
-                        INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
+	                    INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
+	                    INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
                         WHERE ps.id not in (select song_id from playlist_oldplaylistentry \
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 7*24 HOUR) \
-                        AND ps.genre like %s \
-                        AND ps.banned = 0 \
+	                    AND ps.genre like %s \
+	                    AND ps.banned = 0 \
                         ORDER BY rand() LIMIT 10", (querystring,))
     elif query_type == 'userany': #Any song uploaded by the user
         query.execute ("SELECT playlist_song.id, playlist_artist.`name` as artist, playlist_song.title, playlist_album.`name` as album \
@@ -725,14 +725,15 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     headers = {'Accept': '*/*', 'Content-Type': 'application/x-www-form-urlencoded'}
     tempfilename = '/tmp/ytdlfile.' + str(int(time.time()))
     filename = ''
+    input = None
     ydl_opts = {
         'outtmpl': tempfilename,
         'format': 'bestaudio/best',
         'cookiefile': '/shoes/cookies.txt',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio'
-        }],                                                                                                                         
-        'js_runtimes': {'node': {'path': '/usr/bin/node'}},                                                                               
+        }],
+        'js_runtimes': {'node': {'path': '/usr/bin/node'}},
         'remote_components': ['ejs:github']
         # 'username': 'oauth2',
         # 'password': ''
@@ -749,6 +750,11 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
             input = f.read()
         break
 
+    # support the case where there's no audio extraction
+    if input is None:
+        with open(tempfilename, "rb") as f:
+            input = f.read()
+
     filedata = base64.urlsafe_b64encode(input).decode('ascii')
     filedata = dict(filename=cliptitle, filecontents=filedata)
     filedata = urllib.parse.urlencode(filedata)
@@ -763,7 +769,10 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
         msg = "Sorry, " + errmsg.decode('utf-8')
         dl_success = 0
     finally:
-        os.remove(filename)
+        if filename:
+            os.remove(filename)
+        else:
+            os.remove(tempfilename)
     return dl_success, msg
 
 def gbsfm_undo( user_gbsfmid, user_longuid ):
