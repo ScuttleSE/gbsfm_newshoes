@@ -197,8 +197,8 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
                         WHERE ps.id not in (select song_id from playlist_oldplaylistentry \
                         WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 7*24 HOUR) \
-	                    AND ps.genre like %s \
-	                    AND ps.banned = 0 \
+                        AND ps.genre like %s \
+                        AND ps.banned = 0 \
                         ORDER BY rand() LIMIT 10", (querystring,))
     elif query_type == 'userany': #Any song uploaded by the user
         query.execute ("SELECT playlist_song.id, playlist_artist.`name` as artist, playlist_song.title, playlist_album.`name` as album \
