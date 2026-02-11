@@ -725,14 +725,15 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
     headers = {'Accept': '*/*', 'Content-Type': 'application/x-www-form-urlencoded'}
     tempfilename = '/tmp/ytdlfile.' + str(int(time.time()))
     filename = ''
+    input = None
     ydl_opts = {
         'outtmpl': tempfilename,
         'format': 'bestaudio/best',
         'cookiefile': '/shoes/cookies.txt',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio'
-        }],                                                                                                                         
-        'js_runtimes': {'node': {'path': '/usr/bin/node'}},                                                                               
+        }],
+        'js_runtimes': {'node': {'path': '/usr/bin/node'}},
         'remote_components': ['ejs:github']
         # 'username': 'oauth2',
         # 'password': ''
@@ -749,6 +750,11 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
             input = f.read()
         break
 
+    # support the case where there's no audio extraction
+    if input is None:
+        with open(tempfilename, "rb") as f:
+            input = f.read()
+
     filedata = base64.urlsafe_b64encode(input).decode('ascii')
     filedata = dict(filename=cliptitle, filecontents=filedata)
     filedata = urllib.parse.urlencode(filedata)
@@ -763,7 +769,10 @@ def gbsfm_ytdlsong( userid, apikey, youtubeclip ):
         msg = "Sorry, " + errmsg.decode('utf-8')
         dl_success = 0
     finally:
-        os.remove(filename)
+        if filename:
+            os.remove(filename)
+        else:
+            os.remove(tempfilename)
     return dl_success, msg
 
 def gbsfm_undo( user_gbsfmid, user_longuid ):
