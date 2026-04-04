@@ -9,6 +9,9 @@ import ai
 import wa
 import playing
 import subprocess
+import flight
+import io
+import contextlib
 from collections import deque
 
 print(config.discord_application_id)
@@ -390,6 +393,15 @@ async def on_message(message):
         response = ai.ai_9ball(aiquery)
         print(response)
         await message.channel.send(response)
+    if message.content.startswith('!flight '):
+        flight_number = message.content.split(' ', 1)[1].strip()
+        buf = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(buf):
+                flight.get_flight_info(flight_number, discord=True)
+            await message.channel.send(buf.getvalue())
+        except SystemExit as e:
+            await message.channel.send(str(e))
 
 #Stuff you can do un-authed
 
