@@ -22,6 +22,11 @@ intents.members = True
 intents.message_content = True
 client = discord.Client(intents=intents)
 
+#Run a blocking (DB) function off the event loop so the bot stays responsive
+async def run_db(func, *args):
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(None, func, *args)
+
 #Waiting for the bot to log in
 @client.event
 async def on_ready():
@@ -97,7 +102,7 @@ async def update_playing():
     playing_prev = 'NULL2'
     await client.wait_until_ready()
     while not client.is_closed():
-        nowplaying = gbsfm.gbsfm_nowplaying()
+        nowplaying = await run_db(gbsfm.gbsfm_nowplaying)
         playing_now = nowplaying[2] + " (" + nowplaying[3] + ") - " + nowplaying[1]
         #print ("Query is: ", playing_now)
         #Unless the same song is playing as the last time we checked, change "game"
@@ -123,7 +128,7 @@ async def on_message(message):
 
     #Here begins general commandtriggers
     if message.content.startswith(wordlist_commandtriggers):
-        authbool, user_gbsfmid, user_apikey, user_shortuid, user_longuid = gbsfm.gbsfm_isauthed(message.author.id)
+        authbool, user_gbsfmid, user_apikey, user_shortuid, user_longuid = await run_db(gbsfm.gbsfm_isauthed, message.author.id)
         if authbool == 0:
             await message.channel.send(string_not_authed_response)
             return
@@ -140,79 +145,79 @@ async def on_message(message):
 
         #Add any unplayed song
         if any(add_command == word for word in wordlist_addlist_anyunplayed):
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('aup', user_gbsfmid, user_apikey, user_longuid, 0)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'aup', user_gbsfmid, user_apikey, user_longuid, 0)
 
         #Add song from genre
         if add_command[0] == "&":
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('genre', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'genre', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add any random song
         if any(add_command == word for word in wordlist_addlist_random):
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('random', user_gbsfmid, user_apikey, user_longuid, 0)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'random', user_gbsfmid, user_apikey, user_longuid, 0)
 
         #Add any unplayed song uploaded by the user
         if any(add_command == word for word in wordlist_addlist_unplayed):
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('unplayed', user_gbsfmid, user_apikey, user_longuid, 0)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'unplayed', user_gbsfmid, user_apikey, user_longuid, 0)
 
         #Add any song uploaded by the user
         if any(add_command == word for word in wordlist_addlist_userany):
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('userany', user_gbsfmid, user_apikey, user_longuid, 0)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'userany', user_gbsfmid, user_apikey, user_longuid, 0)
 
         #Add fave
         if any(add_command == word for word in wordlist_addlist_faves):
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('faves', user_gbsfmid, user_apikey, user_longuid, 0)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'faves', user_gbsfmid, user_apikey, user_longuid, 0)
 
         #Add album title
         if add_command[0] == "#":
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('album', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'album', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add artist
         if add_command[0] == "/":
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'artist', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add artistid
         if add_command[0] == "\\":
-                add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('artistid', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+                add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'artistid', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add title
         if add_command[0] == "!":
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('title', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'title', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add user
         if add_command[0] == ":":
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('user', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'user', user_gbsfmid, user_apikey, user_longuid, add_command[1:])
 
         #Add short dong
         if any(add_command == word for word in wordlist_addlist_short):
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('sup', user_gbsfmid, user_apikey, user_longuid, 10)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'sup', user_gbsfmid, user_apikey, user_longuid, 10)
 
         #Add by dong id
         if add_command.isnumeric():
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('dongid', user_gbsfmid, user_apikey, user_longuid, add_command)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'dongid', user_gbsfmid, user_apikey, user_longuid, add_command)
 
         #Add another users faves
         if add_command.startswith('<@'):
-            add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('otherfav', user_gbsfmid, user_apikey, user_longuid, add_command)
+            add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'otherfav', user_gbsfmid, user_apikey, user_longuid, add_command)
 
         #Send response message
         if add_success == 1:
             msgid = await message.channel.send(str_addmessage)
-            gbsfm.gbsfm_add_botmessage(msgid.id, added_songid)
+            await run_db(gbsfm.gbsfm_add_botmessage, msgid.id, added_songid)
         if add_success == 0:
             msgid = await message.channel.send(str_addmessage)
 
     #Other commands
     if any(message.content.startswith(word) for word in standalone_wordlist_all):
-        authbool, user_gbsfmid, user_apikey, user_shortuid, user_longuid = gbsfm.gbsfm_isauthed(message.author.id)
+        authbool, user_gbsfmid, user_apikey, user_shortuid, user_longuid = await run_db(gbsfm.gbsfm_isauthed, message.author.id)
         if authbool == 0:
             await message.channel.send(string_not_authed_response)
             return
         #Stoat-stats
         if any(message.content.startswith(word) for word in wordlist_stoat_list):
-            await message.author.send(gbsfm.gbsfm_stoats(user_gbsfmid))
+            await message.author.send(await run_db(gbsfm.gbsfm_stoats, user_gbsfmid))
         #Fav current song
         if any(message.content.startswith(word) for word in wordlist_faves):
-            await message.channel.send(gbsfm.gbsfm_addfav(user_gbsfmid, user_longuid))
+            await message.channel.send(await run_db(gbsfm.gbsfm_addfav, user_gbsfmid, user_longuid))
         #Add/remove/list role(s)
         if any(message.content.startswith(word) for word in wordlist_roles):
             if message.content.startswith('!listroles'):
@@ -253,7 +258,7 @@ async def on_message(message):
                             token_recipient_short = str(message.mentions[0])
                             token_amount = token_message[2]
                             print(token_recipient)
-                            token_response = gbsfm.gbsfm_givetokens(token_recipient, token_recipient_short, token_amount)
+                            token_response = await run_db(gbsfm.gbsfm_givetokens, token_recipient, token_recipient_short, token_amount)
                             await message.channel.send(token_response)
                         else:
                             print(token_message)
@@ -262,7 +267,7 @@ async def on_message(message):
             #Check tokens
             else:
                 user_longuid = "<@" + user_longuid + ">"
-                token_response = gbsfm.gbsfm_gettokens(user_gbsfmid, user_longuid)
+                token_response = await run_db(gbsfm.gbsfm_gettokens, user_gbsfmid, user_longuid)
                 await message.channel.send(token_response)
         #Play jingle
         if any(message.content.startswith(word) for word in wordlist_jingle):
@@ -271,17 +276,17 @@ async def on_message(message):
                     if str(role.id) in list_roles_play_jingle: #Needed role to play jingle
                         valid_group = 1
                         user_longuid = "<@" + str(user_longuid) + ">"
-                        add_success, str_addmessage, added_songid = gbsfm.gbsfm_jingle(user_longuid)
+                        add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_jingle, user_longuid)
                         if add_success == 1:
                             msgid = await message.channel.send(str_addmessage)
-                            gbsfm.gbsfm_add_botmessage(msgid.id, added_songid)
+                            await run_db(gbsfm.gbsfm_add_botmessage, msgid.id, added_songid)
                         if add_success == 0:
                             msgid = await message.channel.send(str_addmessage)
             if valid_group == 0:
                 await message.channel.send(string_jingle_deny)
         #Check when your next dong is playing
         if any(message.content.startswith(word) for word in wordlist_when):
-            result, reponsemessage = gbsfm.gbsfm_when(user_gbsfmid)
+            result, reponsemessage = await run_db(gbsfm.gbsfm_when, user_gbsfmid)
             await message.channel.send(reponsemessage)
         #Restart stuff
         if any(message.content.startswith(word) for word in wordlist_system):
@@ -307,11 +312,11 @@ async def on_message(message):
         #Wolfram Alpha
         if any(message.content.startswith(word) for word in wordlist_wa):
             waquery = message.content.split(" ", 1)
-            await message.channel.send(wa.wa_query(waquery[1]))
+            await message.channel.send(await run_db(wa.wa_query, waquery[1]))
         #Voting
         if any(message.content.startswith(word) for word in wordlist_vote_list):
             voteparts = message.content.split(" ")
-            votesuccess, returnmessage = gbsfm.gbsfm_vote(voteparts[1:], user_gbsfmid, user_apikey)
+            votesuccess, returnmessage = await run_db(gbsfm.gbsfm_vote, voteparts[1:], user_gbsfmid, user_apikey)
             await message.channel.send(returnmessage)
         #Stream password stuff
         if any(message.content.startswith(word) for word in wordlist_stream):
@@ -321,9 +326,9 @@ async def on_message(message):
                         valid_group = 1
             if valid_group == 1:
                 if message.content.startswith('!newstreampw'):
-                    streampw = gbsfm.gbsfm_streampw('set')
+                    streampw = await run_db(gbsfm.gbsfm_streampw, 'set')
                 if message.content.startswith('!getstreampw'):
-                    streampw = gbsfm.gbsfm_streampw('get')
+                    streampw = await run_db(gbsfm.gbsfm_streampw, 'get')
                 await message.author.send(streampw)
             else:
                 await message.channel.send(string_streampw_denied)
@@ -332,12 +337,12 @@ async def on_message(message):
             user_longuid = "<@" + str(user_longuid) + ">"
             if message.content.startswith('!hit'):
                 #print('fart')
-                add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('highrating', user_gbsfmid, user_apikey, user_longuid, 4.8)
+                add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'highrating', user_gbsfmid, user_apikey, user_longuid, 4.8)
             elif message.content.startswith('!shit'):
-                add_success, str_addmessage, added_songid = gbsfm.gbsfm_play('lowrating', user_gbsfmid, user_apikey, user_longuid, 2)
+                add_success, str_addmessage, added_songid = await run_db(gbsfm.gbsfm_play, 'lowrating', user_gbsfmid, user_apikey, user_longuid, 2)
             if add_success == 1:
                 msgid = await message.channel.send(str_addmessage)
-                gbsfm.gbsfm_add_botmessage(msgid.id, added_songid)
+                await run_db(gbsfm.gbsfm_add_botmessage, msgid.id, added_songid)
             if add_success == 0:
                 msgid = await message.channel.send(str_addmessage)
         #Youtube download
@@ -345,7 +350,7 @@ async def on_message(message):
             msgparts = message.content.split(" ")
             youtubelink = msgparts[1]
             print(youtubelink)
-            dl_success, msg = gbsfm.gbsfm_ytdlsong(user_gbsfmid, user_apikey, youtubelink)
+            dl_success, msg = await run_db(gbsfm.gbsfm_ytdlsong, user_gbsfmid, user_apikey, youtubelink)
             await message.channel.send(msg)
         #Undo last added dong
         if any(message.content.startswith(word) for word in wordlist_undo):
@@ -353,7 +358,7 @@ async def on_message(message):
                 msg = 'Yeah, no...'
             else:
                 user_longuid = "<@" + str(user_longuid) + ">"
-                msg = gbsfm.gbsfm_undo(user_gbsfmid, user_longuid)
+                msg = await run_db(gbsfm.gbsfm_undo, user_gbsfmid, user_longuid)
             await message.channel.send(msg)
 
     if message.content.startswith('!idcheck'):
@@ -407,25 +412,25 @@ async def on_message(message):
 
     #Playing?
     if "playing?" in message.content.lower():
-        artwork, textreply, songid = playing.playingquestion()
+        artwork, textreply, songid = await run_db(playing.playingquestion)
         em_art = discord.Embed(url=artwork)
         msgid = await message.channel.send(artwork)
-        gbsfm.gbsfm_add_botmessage(msgid.id, songid)
+        await run_db(gbsfm.gbsfm_add_botmessage, msgid.id, songid)
         msgid = await message.channel.send(textreply)
-        gbsfm.gbsfm_add_botmessage(msgid.id, songid)
+        await run_db(gbsfm.gbsfm_add_botmessage, msgid.id, songid)
 
     #Authing
     if message.content.startswith('!auth'):
         newmessage = message.content.split()
         authid = newmessage[1]
-        auth_success, auth_message = gbsfm.gbsfm_auth(authid, str(message.author), str(message.author.id))
+        auth_success, auth_message = await run_db(gbsfm.gbsfm_auth, authid, str(message.author), str(message.author.id))
         await message.channel.send(auth_message)
 
 #Vote by reacting 1-5 on the dong
 @client.event
 async def on_raw_reaction_add(reaction):
     vote_emoji = hashlib.md5(reaction.emoji.name.encode("utf-8")).hexdigest()
-    voteresult, votestring = gbsfm.gbsfm_reactionvote( vote_emoji, str(reaction.message_id), reaction.user_id)
+    voteresult, votestring = await run_db(gbsfm.gbsfm_reactionvote, vote_emoji, str(reaction.message_id), reaction.user_id)
     print(voteresult)
     if not (voteresult == 'unvoteable' or voteresult == 'unused_emoji'):
         channel = client.get_channel(reaction.channel_id)
