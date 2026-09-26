@@ -181,17 +181,20 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         AND ps.banned = 0 \
                         LIMIT 10")
     elif query_type == 'unplayed': #Any song uploaded by the user that is unplayed
-        query.execute ("SELECT playlist_song.id, playlist_artist.`name` as artist, playlist_song.title, playlist_album.`name` as album \
-                        FROM playlist_song \
-                        INNER JOIN playlist_album ON playlist_song.album_id = playlist_album.id \
-                        INNER JOIN playlist_artist ON playlist_song.artist_id = playlist_artist.id \
-                        WHERE playlist_song.uploader_id = %s \
-                        and playlist_song.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 7*24 HOUR) \
-                        and playlist_song.id not in (SELECT song_id FROM \
-                        playlist_oldplaylistentry WHERE song_id = playlist_song.id) \
-                        AND playlist_song.banned = 0 \
-                        order by rand() limit 10", [user_gbsfmid])
+        query.execute ("SELECT ps.id, playlist_artist.`name` as artist, ps.title, playlist_album.`name` as album \
+                        FROM ( \
+                        SELECT s.id \
+                        FROM playlist_song s \
+                        LEFT JOIN playlist_oldplaylistentry ope_all \
+                        ON ope_all.song_id = s.id \
+                        WHERE s.uploader_id = %s \
+                        AND s.banned = 0 \
+                        AND ope_all.song_id IS NULL \
+                        ORDER BY rand() LIMIT 10 \
+                        ) picked \
+                        INNER JOIN playlist_song ps ON ps.id = picked.id \
+                        INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
+                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id", [user_gbsfmid])
     elif query_type == 'genre': #Any song with specified genre
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM ( \
