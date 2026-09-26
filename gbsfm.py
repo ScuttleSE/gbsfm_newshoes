@@ -164,12 +164,13 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     query = db.cursor()
     if query_type == 'aup': #Any unplayed song
         query.execute ("SET SESSION optimizer_switch='materialization=off,semijoin=off'")
+        query.execute ("SET @pivot = FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song))")
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM playlist_song ps \
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
                         WHERE ps.banned = 0 \
-                        AND ps.id >= FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song)) \
+                        AND ps.id >= @pivot \
                         AND NOT EXISTS (SELECT 1 FROM playlist_oldplaylistentry ope WHERE ope.song_id = ps.id) \
                         ORDER BY ps.id \
                         LIMIT 1")
