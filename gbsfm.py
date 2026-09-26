@@ -163,15 +163,16 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     db = MySQLdb.connect(host=config.mysql_dbhost, user=config.mysql_user, passwd=config.mysql_passwd, db=config.mysql_db, charset="utf8")
     query = db.cursor()
     if query_type == 'aup': #Any unplayed song
+        query.execute ("SET SESSION optimizer_switch='materialization=off,semijoin=off'")
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM playlist_song ps \
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
-                        LEFT JOIN playlist_oldplaylistentry ope ON ope.song_id = ps.id \
-                        WHERE ps.id >= (SELECT FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song))) \
-                        AND ope.song_id IS NULL \
-                        AND ps.banned = 0 \
-                        LIMIT 10")
+                        WHERE ps.banned = 0 \
+                        AND ps.id >= FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song)) \
+                        AND NOT EXISTS (SELECT 1 FROM playlist_oldplaylistentry ope WHERE ope.song_id = ps.id) \
+                        ORDER BY ps.id \
+                        LIMIT 1")
     elif query_type == 'random': #Any random song
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM playlist_song ps \
