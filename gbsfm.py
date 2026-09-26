@@ -164,20 +164,22 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
     query = db.cursor()
     if query_type == 'aup': #Any unplayed song
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
-                        FROM playlist_song AS ps \
+                        FROM playlist_song ps \
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
-                        WHERE NOT \
-                        EXISTS (SELECT * FROM playlist_oldplaylistentry \
-                        WHERE song_id = ps.id) \
+                        LEFT JOIN playlist_oldplaylistentry ope ON ope.song_id = ps.id \
+                        WHERE ps.id >= (SELECT FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song))) \
+                        AND ope.song_id IS NULL \
                         AND ps.banned = 0 \
-                        order by rand() limit 10")
+                        LIMIT 10")
     elif query_type == 'random': #Any random song
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
-                        FROM playlist_song AS ps \
+                        FROM playlist_song ps \
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
-                        order by rand() limit 10")
+                        WHERE ps.id >= (SELECT FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song))) \
+                        AND ps.banned = 0 \
+                        LIMIT 10")
     elif query_type == 'unplayed': #Any song uploaded by the user that is unplayed
         query.execute ("SELECT playlist_song.id, playlist_artist.`name` as artist, playlist_song.title, playlist_album.`name` as album \
                         FROM playlist_song \
