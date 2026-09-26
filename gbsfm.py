@@ -260,24 +260,38 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         order by RAND() limit 10", (querystring,))
     elif query_type == 'title': #Query by title
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
-                        FROM playlist_song AS ps \
+                        FROM ( \
+                        SELECT s.id \
+                        FROM playlist_song s \
+                        LEFT JOIN playlist_oldplaylistentry ope \
+                        ON ope.song_id = s.id AND ope.playtime > NOW()-INTERVAL 7*24 HOUR \
+                        LEFT JOIN playlist_playlistentry ppe \
+                        ON ppe.song_id = s.id \
+                        WHERE s.title LIKE %s \
+                        AND ope.song_id IS NULL \
+                        AND ppe.song_id IS NULL \
+                        ORDER BY rand() LIMIT 10 \
+                        ) picked \
+                        INNER JOIN playlist_song ps ON ps.id = picked.id \
                         INNER JOIN playlist_album AS pa ON ps.album_id = pa.id \
-                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
-                        WHERE ps.album_id = pa.id and ps.title LIKE %s \
-                        and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 7*24 HOUR) \
-                        and ps.id not in (select song_id from playlist_playlistentry) \
-                        order by RAND() limit 10", (querystring,))
+                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id", (querystring,))
     elif query_type == 'sup': #Get short dongs
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, pa.`name` AS album \
-                        FROM playlist_song AS ps \
+                        FROM ( \
+                        SELECT s.id \
+                        FROM playlist_song s \
+                        LEFT JOIN playlist_oldplaylistentry ope \
+                        ON ope.song_id = s.id AND ope.playtime > NOW()-INTERVAL 7*24 HOUR \
+                        LEFT JOIN playlist_playlistentry ppe \
+                        ON ppe.song_id = s.id \
+                        WHERE s.length < %s \
+                        AND ope.song_id IS NULL \
+                        AND ppe.song_id IS NULL \
+                        ORDER BY rand() LIMIT 10 \
+                        ) picked \
+                        INNER JOIN playlist_song ps ON ps.id = picked.id \
                         INNER JOIN playlist_album AS pa ON ps.album_id = pa.id \
-                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
-                        WHERE ps.length < %s \
-                        and ps.id not in (select song_id from playlist_oldplaylistentry \
-                        WHERE playlist_oldplaylistentry.playtime > NOW()-INTERVAL 7*24 HOUR) \
-                        and ps.id not in (select song_id from playlist_playlistentry) \
-                        order by RAND() limit 10", [querystring])
+                        INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id", [querystring])
     elif query_type == 'user': #Add by username
         query.execute ("SELECT playlist_song.id, playlist_artist.`name`, playlist_song.title, playlist_album.`name` as album \
                         FROM playlist_song \
