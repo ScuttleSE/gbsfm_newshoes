@@ -175,13 +175,15 @@ def gbsfm_query( query_type, user_gbsfmid, querystring ):
                         ORDER BY ps.id \
                         LIMIT 1")
     elif query_type == 'random': #Any random song
+        query.execute ("SET @pivot = FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song))")
         query.execute ("SELECT ps.id, playlist_artist.`name`, ps.title, playlist_album.`name` \
                         FROM playlist_song ps \
                         INNER JOIN playlist_artist ON ps.artist_id = playlist_artist.id \
                         INNER JOIN playlist_album ON ps.album_id = playlist_album.id \
-                        WHERE ps.id >= (SELECT FLOOR(RAND() * (SELECT MAX(id) FROM playlist_song))) \
-                        AND ps.banned = 0 \
-                        LIMIT 10")
+                        WHERE ps.banned = 0 \
+                        AND ps.id >= @pivot \
+                        ORDER BY ps.id \
+                        LIMIT 1")
     elif query_type == 'unplayed': #Any song uploaded by the user that is unplayed
         query.execute ("SELECT ps.id, playlist_artist.`name` as artist, ps.title, playlist_album.`name` as album \
                         FROM ( \
